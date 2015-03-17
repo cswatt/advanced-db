@@ -1,5 +1,5 @@
 package creator;
 
-public class EntityBoxCreator {
+public class EntityBoxCreator extends Creator{
 
 }
