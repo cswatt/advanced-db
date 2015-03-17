@@ -1,5 +1,5 @@
 package creator;
 
-public class QueryBoxCreator {
+public class QueryBoxCreator extends Creator{
 
 }
