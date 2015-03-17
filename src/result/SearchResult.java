@@ -18,6 +18,7 @@ public class SearchResult extends Result{
 	public SearchResult(JSONObject search){
 		this.search = search;
 		parse();
+		System.out.println(toString());
 	}
 	
 	private void parse(){
@@ -25,6 +26,12 @@ public class SearchResult extends Result{
 		id = JsonPath.read(search,"$.id").toString();
 		name = JsonPath.read(search,"$.name").toString();
 		notable_id = JsonPath.read(search, "$.notable.id").toString();
+	}
+	
+	//test
+	public String toString(){
+		String s = "mid: " + mid + "; id: " + id + "; name:" + name;
+		return s;
 	}
 	
 }

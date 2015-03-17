@@ -10,7 +10,6 @@ import com.jayway.jsonpath.JsonPath;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Properties;
 
 import result.Result;
 import result.SearchResult;
@@ -65,7 +64,7 @@ public class SearchService extends Service{
 					if (types.contains(notable_id)){
 						found_result = (JSONObject)result;
 						found = true;
-						System.out.println("found");
+						//System.out.println("found");
 						break;
 					}
 				}
