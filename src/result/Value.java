@@ -1,10 +1,25 @@
 package result;
 
-public class Value {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class Value implements JSONable{
 	
-	private String text;
-	private String id;
-	private String timestamp;
+	private static final long serialVersionUID = -7934442049449016087L;
+	
+	@Expose
+    @SerializedName(value = "text")
+	protected String text;
+	@Expose
+    @SerializedName(value = "id")
+	protected String id;
+	@Expose
+    @SerializedName(value = "timestamp")
+	protected String timestamp;
+	@Expose
+    @SerializedName(value = "value")
 	private Value value;
 	
 	public Value(){
@@ -42,4 +57,12 @@ public class Value {
 	public void setValue(Value value){
 		this.value = value;
 	}
+	
+	@Override
+    public String toJSONString() {
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create();
+        return gson.toJson(this);
+    }
 }
