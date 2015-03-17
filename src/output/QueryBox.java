@@ -1,5 +1,5 @@
 package output;
 
-public class QueryBox {
+public class QueryBox extends Output{
 
 }

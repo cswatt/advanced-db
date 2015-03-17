@@ -1,5 +1,5 @@
 package output;
 
-public class EntityBox {
+public class EntityBox extends Output{
 
 }
