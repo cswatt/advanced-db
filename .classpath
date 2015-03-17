@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/json-smart-1.2.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-simple-1.7.10.jar"/>
+	<classpathentry kind="lib" path="/BingQueryBuilder/gson-2.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
