@@ -1,5 +1,5 @@
 package result;
 
-public class MQLResult {
+public class MQLResult extends Result{
 
 }

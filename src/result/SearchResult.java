@@ -1,5 +1,5 @@
 package result;
 
-public class SearchResult {
+public class SearchResult extends Result{
 
 }
