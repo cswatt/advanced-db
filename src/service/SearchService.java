@@ -5,7 +5,7 @@ package service;
 //ADD ANY OTHER METHODS YOU MIGHT THINK ITS NECESSARY
 //IF A METHOD APPLIES TO ALL API METHODS THEN ADD IT AS AN ABSTRACT METHOD IN THE SERVICE CLASS
 
-public class SearchService {
+public class SearchService extends Service{
 
 	//constructor - pass any arguments that might be necessary for the API call
 	public SearchService(){
