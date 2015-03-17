@@ -8,6 +8,8 @@ public class BusinessPerson extends Person{
 	
 	public BusinessPerson(String name,String dateOfBirth,String placeOfBirth){
 		super(name,dateOfBirth,placeOfBirth);
+		
+		this.setIsBusinessPerson(true);
 	}
 	
 	public List<Organization> getOrganizations(){

@@ -3,7 +3,7 @@ package entities;
 import java.util.List;
 
 
-public abstract class Person {
+public class Person {
 	
 	private String name;
 	private String dateOfBirth;
@@ -121,5 +121,51 @@ public abstract class Person {
 	
 	public void setIsAuthor(boolean isAuthor){
 		this.isAuthor = isAuthor;
+	}
+
+	public void print(){
+		System.out.println("---------------PERSON---------------");
+		System.out.println("Name: "+ name);
+		System.out.println("Date Of Birth: "+dateOfBirth);
+		System.out.println("Place Of Birth: "+placeOfBirth);
+		
+		if(dateOfDeath != null && !dateOfDeath.equals(""))
+			System.out.println("Date Of Death: "+dateOfDeath);
+		if(placeOfDeath != null && !placeOfDeath.equals(""))
+			System.out.println("Place Of Death: "+placeOfDeath);
+		if(causeOfDeath != null && !causeOfDeath.equals(""))
+			System.out.println("Cause Of Death: "+causeOfDeath);
+		
+		if(siblings.size() > 0){
+			System.out.print("Siblings: ");
+			for(String sibling : siblings)
+				System.out.println(sibling+" ");
+			System.out.println();
+		}
+		if(spouses.size() > 0){
+			System.out.print("Spouses: ");
+			for(String spouse : spouses)
+				System.out.println(spouse+" ");
+			System.out.println();
+		}
+		
+		if(description!=null && !description.equals("")){
+			System.out.println("Description: "+description);
+		}
+		
+		if(isBusinessPerson)
+			System.out.println("He is a business person: YES");
+		else
+			System.out.println("He is a business person: NO");
+		
+		if(isAuthor)
+			System.out.println("He is an author: YES");
+		else
+			System.out.println("He is an author: NO");
+		
+		if(isActor)
+			System.out.println("He is an actor: YES");
+		else
+			System.out.println("He is an actor: NO");
 	}
 }

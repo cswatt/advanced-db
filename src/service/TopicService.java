@@ -48,11 +48,12 @@ public class TopicService extends Service{
 		      
 		      JSONObject topic = (JSONObject)parser.parse(httpResponse.parseAsString());
 		      
-		      System.out.println(JsonPath.read(topic,"$.property['/type/object/name'].values[0].value").toString());
-		      Result res = new TopicResult(topic);
+		      //System.out.println(JsonPath.read(topic,"$.property['/type/object/name'].values[0].value").toString());
+		      TopicResult result = new TopicResult(topic);
 		      
+		      result.parseTopic();
 		      
-		      //System.out.println("topic: "+topic);
+		      result.getPerson().print();
 		      
 		    } catch (Exception ex) {
 		      ex.printStackTrace();

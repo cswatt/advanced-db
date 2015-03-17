@@ -1,5 +1,7 @@
 package result;
 
+import org.json.simple.JSONObject;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -20,7 +22,11 @@ public class Value implements JSONable{
 	protected String timestamp;
 	@Expose
     @SerializedName(value = "value")
-	private Value value;
+	private String value;
+	
+	@Expose
+    @SerializedName(value = "property")
+	private JSONObject property;
 	
 	public Value(){
 		
@@ -50,12 +56,20 @@ public class Value implements JSONable{
 		this.timestamp = timestamp;
 	}
 	
-	public Value getValue(){
+	public String getValue(){
 		return this.value;
 	}
 	
-	public void setValue(Value value){
+	public void setValue(String value){
 		this.value = value;
+	}
+	
+	public JSONObject getProperty(){
+		return this.property;
+	}
+	
+	public void setProperty(JSONObject property){
+		this.property = property;
 	}
 	
 	@Override

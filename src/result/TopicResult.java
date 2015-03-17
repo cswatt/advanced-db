@@ -36,7 +36,6 @@ public class TopicResult extends Result{
 	
 	public TopicResult(JSONObject topic){
 		this.topic = topic;
-		
 	}
 	
 	public void parseTopic(){
@@ -81,13 +80,14 @@ public class TopicResult extends Result{
 				continue;
 			}
 		}
-		
-		
+
+		processTypes();
 	}
 	
 	private void processTypes(){
-		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].id").toString();
-		System.out.println("name: "+name);
+		
+		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+
 		for(Type type : types){
 			//This is a person
 			if(type.equals(Type.PERSON)){
@@ -95,31 +95,45 @@ public class TopicResult extends Result{
 				String placeOfBirth = null;
 				String dateOfDeath = null;
 				String placeOfDeath = null;
+				String causeOfDeath = null;
 				
-				String res = JsonPath.read(topic,"$.property['/common/topic/notable_properties']").toString();
-				Values notableProperties = gson.fromJson(res, Values.class);
+				List<String> namesOfSimblings = new ArrayList<String>();
+				List<String> namesOfSpouses = new ArrayList<String>();
 				
-				for(Value value : notableProperties.getValues()){
-					if(value.getText().equals("Date of birth")){
-						dateOfBirth = JsonPath.read(topic,"$.property['/people/person/date_of_birth'].values[0].text").toString();
-					}
-					else if(value.getText().equals("Place of birth")){
-						placeOfBirth = JsonPath.read(topic,"$.property['/people/person/place_of_birth'].values[0].text").toString();
-					}
-					else if(value.getText().equals("Date of death")){
-						dateOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/date_of_death'].values[0].text").toString();
-					}
-					else if(value.getText().equals("Place of death")){
-						placeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/place_of_death'].values[0].text").toString();
-					}
+				//extract notable properties
+				dateOfBirth = JsonPath.read(topic,"$.property['/people/person/date_of_birth'].values[0].text").toString();
+				placeOfBirth = JsonPath.read(topic,"$.property['/people/person/place_of_birth'].values[0].text").toString();
+				if(topic.containsValue("/people/deceased_person/date_of_death"))
+					dateOfDeath = JsonPath.read(topic,"$.property['people/deceased_person/date_of_death'].values[0].text").toString();
+				if(topic.containsValue("/people/deceased_person/place_of_death"))
+					dateOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/place_of_death'].values[0].text").toString();
+				if(topic.containsValue("/people/deceased_person/cause_of_death"))
+					causeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death'].values[0].text").toString();
+				
+				//extract siblings
+				String res2 = JsonPath.read(topic,"$.property['/people/person/sibling_s']").toString();
+				Values siblings = gson.fromJson(res2, Values.class);
+				for(Value sibling : siblings.getValues()){
+					namesOfSimblings.add(JsonPath.read(sibling.getProperty(),"$./people/sibling_relationship/sibling.values[0].text").toString());
 				}
 				
-				String causeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death'].values[0].text").toString();
+				//extract spouses
+				String res3 = JsonPath.read(topic,"$.property['/people/person/spouse_s']").toString();
+				Values spouses = gson.fromJson(res3, Values.class);
+				for(Value spouse : spouses.getValues()){
+					namesOfSpouses.add(JsonPath.read(spouse.getProperty(),"$./people/marriage/spouse.values[0].text").toString());
+				}
+				
+				//extract description
+				String description = JsonPath.read(topic,"$.property['/common/topic/description'].values[0].value").toString();
 				
 				person = new Person(name,dateOfBirth,placeOfBirth);
 				person.setDateOfDeath(dateOfDeath);
 				person.setPlaceOfDeath(placeOfDeath);
 				person.setCauseOfDeath(causeOfDeath);
+				person.setSiblings(namesOfSimblings);
+				person.setSpouses(namesOfSpouses);
+				person.setDescription(description);
 			}
 		}
 	}
