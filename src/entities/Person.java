@@ -17,6 +17,10 @@ public abstract class Person {
 	
 	private String description;
 	
+	private boolean isBusinessPerson = false;
+	private boolean isAuthor = false;
+	private boolean isActor = false;
+	
 	public Person(String name, String dateOfBirth, String placeOfBirth){
 		this.name = name;
 		this.dateOfBirth = dateOfBirth;
@@ -93,5 +97,29 @@ public abstract class Person {
 	
 	public void setDescription(String description){
 		this.description = description;
+	}
+	
+	public boolean isBusinessPerson(){
+		return this.isBusinessPerson;
+	}
+	
+	public void setIsBusinessPerson(boolean isBusinessPerson){
+		this.isBusinessPerson = isBusinessPerson;
+	}
+	
+	public boolean isActor(){
+		return this.isActor;
+	}
+	
+	public void setIsActor(boolean isActor){
+		this.isActor = isActor;
+	}
+	
+	public boolean isAuthor(){
+		return this.isAuthor;
+	}
+	
+	public void setIsAuthor(boolean isAuthor){
+		this.isAuthor = isAuthor;
 	}
 }
