@@ -31,13 +31,12 @@ public class SearchService extends Service{
 	private GenericUrl url;
 	JSONParser parser = new JSONParser();
 	
+	private HashSet<String> types = new HashSet<String>();
+	
 	public SearchService(String apiKey, String query){
 		this.query = query;
 		this.apiKey = apiKey;
-	}
-	
-	public void requestInfo(){
-		HashSet<String> types = new HashSet<String>();
+		
 		types.add("/people/person");
 		types.add("/book/author");
 		types.add("/film/actor");
@@ -47,6 +46,9 @@ public class SearchService extends Service{
 		types.add("/sports/sports_league");
 		types.add("/sports/sports_team");
 		types.add("/sports/professional_sports_team");
+	}
+	
+	public void requestInfo(){
 		String mid = "";
 		String notable_id = "";
 		
