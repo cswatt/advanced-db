@@ -27,9 +27,16 @@ public class Values implements JSONable{
 		this.values = values;
 	}
 	
-	public void printValues(){
-		for(int i=0;i<values.size();i++)
-			System.out.println("Value: "+values.get(i).id);
+	public void printValues(String field){
+		for(int i=0;i<values.size();i++){
+			if(field.equals("id"))
+				System.out.println("Value: "+values.get(i).id);
+			else if(field.equals("text"))
+				System.out.println("Value: "+values.get(i).text);
+			else if(field.equals("timestamp"))
+				System.out.println("Value: "+values.get(i).timestamp);
+		}
+			
 	}
 	
 	@Override
