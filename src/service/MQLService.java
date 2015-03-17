@@ -49,15 +49,17 @@ public class MQLService extends Service{
 	      JSONArray results = (JSONArray)response.get("result");
 	      for (Object result : results) {
 	        System.out.println(JsonPath.read(result,"$.name").toString());
+	        System.out.println(JsonPath.read(result,"$./organization/organization_founder/organizations_founded[*].a:name").toString());
 	      }
 		}
 		catch (Exception ex){
 			ex.printStackTrace();
 		}
 	}
+	
 	public static void main(String args[]){
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		Service service = new MQLService(key, "[{\"id\":null,\"name\":null,\"type\":\"/astronomy/planet\"}]");
+		Service service = new MQLService(key, "[{\"/organization/organization_founder/organizations_founded\": [{\"a:name\": null,\"name~=\": \"Microsoft\"}],\"id\": null,\"name\": null,\"type\": \"/organization/organization_founder\"}]");
 		service.requestInfo();
 	}
 }
