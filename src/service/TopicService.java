@@ -3,17 +3,22 @@ package service;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import result.Result;
+import result.TopicResult;
+
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.jayway.jsonpath.JsonPath;
 
 public class TopicService extends Service{
 
 	private String topicId;
 	private String apiKey;
+	private String filter;
 	
 	//if these are common for all services move it to the abstract class
 	private HttpTransport httpTransport;
@@ -43,12 +48,23 @@ public class TopicService extends Service{
 		      
 		      JSONObject topic = (JSONObject)parser.parse(httpResponse.parseAsString());
 		      
-		      //System.out.println(JsonPath.read(topic,"$.property['/type/object/name'].values[0].value").toString());
+		      System.out.println(JsonPath.read(topic,"$.property['/type/object/name'].values[0].value").toString());
+		      Result res = new TopicResult(topic);
 		      
-		      System.out.println("topic: "+topic);
+		      
+		      //System.out.println("topic: "+topic);
 		      
 		    } catch (Exception ex) {
 		      ex.printStackTrace();
 		    }
 	}
+	
+	//temporary for testing purposes
+	public static void main(String[] args) {
+		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
+		
+		Service service = new TopicService(key,"/m/017nt");
+		service.requestInfo();
+	}
+
 }

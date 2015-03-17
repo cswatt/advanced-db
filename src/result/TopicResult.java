@@ -1,5 +1,8 @@
 package result;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
@@ -11,7 +14,9 @@ public class TopicResult extends Result{
     .excludeFieldsWithoutExposeAnnotation()
     .create();
 	
-	private JSONObject topic; 
+	private JSONObject topic;
+	
+	private List<Type> types = new ArrayList<Type>();
 	
 	
 	public TopicResult(JSONObject topic){
