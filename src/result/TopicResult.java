@@ -97,6 +97,9 @@ public class TopicResult extends Result{
 			if(type.equals(Type.BUSINESSPERSON)){
 				processBusinessPersonType();
 			}
+			if(type.equals(Type.AUTHOR)){
+				processAuthorType();
+			}
 		}
 	}
 	
@@ -268,6 +271,54 @@ public class TopicResult extends Result{
 		}
 		
 		businessPerson.setOrganizations(organizations);
+	}
+	
+	private void processAuthorType(){
+		if(person == null)
+			return;
+		
+		author = new Author(person.getName(),person.getDateOfBirth(),person.getPlaceOfBirth());
+		person.setIsAuthor(true);
+		
+		if(topic.toString().contains("\\/book\\/author\\/works_written")){
+			List<String> bookTitles = new ArrayList<String>();
+			String books_written = JsonPath.read(topic,"$.property['/book/author/works_written']").toString();
+			Values books = gson.fromJson(books_written, Values.class);
+			for(Value book : books.getValues()){
+				bookTitles.add(book.getText());
+			}
+			author.setBooks(bookTitles);
+		}
+		
+		if(topic.toString().contains("\\/book\\/book_subject\\/works")){
+			List<String> bookTitles = new ArrayList<String>();
+			String books_about = JsonPath.read(topic,"$.property['/book/book_subject/works']").toString();
+			Values books = gson.fromJson(books_about, Values.class);
+			for(Value book : books.getValues()){
+				bookTitles.add(book.getText());
+			}
+			author.setBookAboutTheAuthor(bookTitles);
+		}
+		
+		if(topic.toString().contains("\\/influence\\/influence_node\\/influenced")){
+			List<String> influenced = new ArrayList<String>();
+			String people_influenced = JsonPath.read(topic,"$.property['/influence/influence_node/influenced']").toString();
+			Values people = gson.fromJson(people_influenced, Values.class);
+			for(Value p : people.getValues()){
+				influenced.add(p.getText());
+			}
+			author.setInfluenced(influenced);
+		}
+		
+		if(topic.toString().contains("\\/influence\\/influence_node\\/influenced_by")){
+			List<String> influencedBy = new ArrayList<String>();
+			String people_influencedBy = JsonPath.read(topic,"$.property['/influence/influence_node/influenced_by']").toString();
+			Values people = gson.fromJson(people_influencedBy, Values.class);
+			for(Value p : people.getValues()){
+				influencedBy.add(p.getText());
+			}
+			author.setInfluencedBy(influencedBy);
+		}
 	}
 	
 	private Organization existsInOrganizations(List<Organization> organizations, String org_name){

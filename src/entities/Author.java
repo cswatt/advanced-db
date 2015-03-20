@@ -7,8 +7,7 @@ public class Author extends Person{
 	private List<String> books;
 	private List<String> influenced;
 	private List<String> influencedBy;
-	
-	private String bookAboutTheAuthor;
+	private List<String> booksAboutTheAuthor;
 	
 	public Author(String name,String dateOfBirth,String placeOfBirth){
 		super(name,dateOfBirth,placeOfBirth);
@@ -38,11 +37,34 @@ public class Author extends Person{
 		this.influencedBy = influencedBy;
 	}
 	
-	public String getBookAboutTheAuthor(){
-		return this.bookAboutTheAuthor;
+	public List<String> getBookAboutTheAuthor(){
+		return this.booksAboutTheAuthor;
 	}
 	
-	public void setBookAboutTheAuthor(String bookAboutTheAuthor){
-		this.bookAboutTheAuthor = bookAboutTheAuthor;
+	public void setBookAboutTheAuthor(List<String> booksAboutTheAuthor){
+		this.booksAboutTheAuthor = booksAboutTheAuthor;
+	}
+	
+	public void print(){
+		if(books != null && books.size() > 0){
+			System.out.println("Books published by "+this.getName()+":");
+			for(String book : books)
+				System.out.println(book);
+		}
+		if(booksAboutTheAuthor != null && booksAboutTheAuthor.size() > 0){
+			System.out.println("Books about "+this.getName() + ":");
+			for(String book : booksAboutTheAuthor)
+				System.out.println(book);
+		}
+		if(influenced != null && influenced.size() > 0){
+			System.out.println("People "+this.getName() + " influenced:");
+			for(String p : influenced)
+				System.out.println(p);
+		}
+		if(influencedBy != null && influencedBy.size() > 0){
+			System.out.println("People "+this.getName() + " is influenced by:");
+			for(String p : influencedBy)
+				System.out.println(p);
+		}
 	}
 }
