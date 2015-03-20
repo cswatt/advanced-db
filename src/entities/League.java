@@ -75,4 +75,22 @@ public class League {
 		this.teams = teams;
 	}
 	
+	public void print(){
+		System.out.println("---------------LEAGUE---------------");
+		
+		System.out.println("Name: "+ name);
+		System.out.println("Sport: "+sport);
+		System.out.println("Slogan: "+slogan);
+		System.out.println("Championship: "+ championship);
+		System.out.println("Website: "+website);
+		System.out.println("Description: "+description);
+		System.out.println();
+		if(!teams.isEmpty()){
+			System.out.println("League "+this.name+" has the following teams:");
+			for(Team team : teams){
+				System.out.println(team.getName());
+			}
+		}
+	}
+	
 }

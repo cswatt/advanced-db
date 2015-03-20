@@ -59,6 +59,8 @@ public class TopicService extends Service{
 		    	  result.getAuthor().print();
 		      if(result.getActor() != null)
 		    	  result.getActor().print();
+		      if(result.getLeague() != null)
+		    	  result.getLeague().print();
 		      
 		    } catch (Exception ex) {
 		      ex.printStackTrace();
@@ -69,7 +71,7 @@ public class TopicService extends Service{
 	public static void main(String[] args) {
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
 		
-		Service service = new TopicService(key,"/m/016z2j");
+		Service service = new TopicService(key,"/m/05jvx");
 		service.requestInfo();
 	}
 

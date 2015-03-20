@@ -87,13 +87,11 @@ public class TopicResult extends Result{
 	}
 	
 	private void processTypes(){
-		
-		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
 
 		for(Type type : types){
 			//This is a person
 			if(type.equals(Type.PERSON)){
-				processPersonType(name);
+				processPersonType();
 			}
 			if(type.equals(Type.BUSINESSPERSON)){
 				processBusinessPersonType();
@@ -104,10 +102,15 @@ public class TopicResult extends Result{
 			if(type.equals(Type.ACTOR)){
 				processActorType();
 			}
+			if(type.equals(Type.LEAGUE)){
+				processLeagueType();
+			}
 		}
 	}
 	
-	private void processPersonType(String name){
+	private void processPersonType(){
+		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		
 		String dateOfBirth = null;
 		String placeOfBirth = null;
 		String dateOfDeath = null;
@@ -372,6 +375,46 @@ public class TopicResult extends Result{
 			
 			actor.setTvShows(actorsfilms);
 		}
+	}
+	
+	private void processLeagueType(){
+		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		String sport = JsonPath.read(topic,"$.property['/sports/sports_league/sport'].values[0].text").toString();
+		String championship = JsonPath.read(topic,"$.property['/sports/sports_league/championship'].values[0].text").toString();
+		
+		String slogan = null;
+		String website = null;
+		String description = null;
+		
+		List<Team> teams = new ArrayList<Team>();
+		
+		if(topic.toString().contains("\\/organization\\/organization\\/slogan"))
+			slogan = JsonPath.read(topic,"$.property['/organization/organization/slogan'].values[0].text").toString();
+		
+		if(topic.toString().contains("\\/common\\/topic\\/official_website"))
+			website = JsonPath.read(topic,"$.property['/common/topic/official_website'].values[0].text").toString();
+		
+		if(topic.toString().contains("\\/common\\/topic\\/description"))
+			description = JsonPath.read(topic,"$.property['/common/topic/description'].values[0].value").toString();
+		
+		if(topic.toString().contains("\\/sports\\/sports_league\\/teams")){
+			String leagueteams = JsonPath.read(topic,"$.property['/sports/sports_league/teams']").toString();
+			Values lteams = gson.fromJson(leagueteams, Values.class);
+			for(Value lt : lteams.getValues()){
+				if(lt.getProperty().toString().contains("\\/sports\\/sports_league_participation\\/team")){
+					String team_name = JsonPath.read(lt.getProperty(),"$./sports/sports_league_participation/team.values[0].text").toString();
+					teams.add(new Team(team_name,sport));
+				}
+					
+			}
+		}
+		
+		this.league = new League(name,sport,championship);
+		this.league.setSlogan(slogan);
+		this.league.setWebsite(website);
+		this.league.setDescription(description);
+		this.league.setTeams(teams);
+		
 	}
 	
 	private Organization existsInOrganizations(List<Organization> organizations, String org_name){
