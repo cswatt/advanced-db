@@ -4,6 +4,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import output.QueryBox;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,12 +42,8 @@ public class MQLResult extends Result{
 			List<String> organizations = JsonPath.read(res,"$./organization/organization_founder/organizations_founded[*].a:name");
 			mql_map.put(businessperson_tuple, organizations);
 		}
-		
-		Set<List<String>> keys = mql_map.keySet();
-		for (List<String> key : keys) {
-			System.out.println(key);
-			System.out.println(mql_map.get(key));
-		}
+		QueryBox q = new QueryBox(this);
+		q.print();
 	}
 	
 	public void setBookResults(JSONArray book_results){
