@@ -11,6 +11,7 @@ import com.jayway.jsonpath.JsonPath;
 import java.io.IOException;
 import java.util.HashSet;
 
+import result.MQLResult;
 import result.Result;
 import result.SearchResult;
 
@@ -36,30 +37,45 @@ public class MQLService extends Service{
 		this.apiKey = apiKey;
 	}
 	public void requestInfo(){
-		try{
-	      this.httpTransport = new NetHttpTransport();
-	      this.requestFactory = httpTransport.createRequestFactory();
-	      this.url = new GenericUrl("https://www.googleapis.com/freebase/v1/mqlread");
-	      url.put("query", query);
-	      url.put("key", apiKey);
-	      this.request = requestFactory.buildGetRequest(url);
-	      this.httpResponse = request.execute();
-	      
-	      JSONObject response = (JSONObject)parser.parse(httpResponse.parseAsString());
-	      JSONArray results = (JSONArray)response.get("result");
-	      for (Object result : results) {
-	        System.out.println(JsonPath.read(result,"$.name").toString());
-	        System.out.println(JsonPath.read(result,"$./organization/organization_founder/organizations_founded[*].a:name").toString());
-	      }
-		}
-		catch (Exception ex){
+	
+		try {
+			JSONArray book_results = MQLBook(query);
+			JSONArray organization_results = MQLOrganization(query);
+			MQLResult result = new MQLResult(book_results, organization_results);
+		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
+		} 
+	    
 	}
 	
+	public JSONArray MQLBook(String init_query) throws IOException, ParseException{
+		String formatted_query = "[{\"/book/author/works_written\": [{\"a:name\": null,\"name~=\": \"" + init_query + "\"}],\"id\": null,\"name\": null,\"type\": \"/book/author\"}]";
+		return MQL(formatted_query);
+	}
+	
+	public JSONArray MQLOrganization(String init_query) throws IOException, ParseException{
+		String formatted_query = "[{\"/organization/organization_founder/organizations_founded\": [{\"a:name\": null,\"name~=\": \"" + init_query + "\"}],\"id\": null,\"name\": null,\"type\": \"/organization/organization_founder\"}]";
+		return MQL(formatted_query);
+	}
+	
+	public JSONArray MQL(String formatted_query) throws IOException, ParseException{
+      this.httpTransport = new NetHttpTransport();
+      this.requestFactory = httpTransport.createRequestFactory();
+      this.url = new GenericUrl("https://www.googleapis.com/freebase/v1/mqlread");
+      url.put("query", formatted_query);
+      url.put("key", apiKey);
+      this.request = requestFactory.buildGetRequest(url);
+      this.httpResponse = request.execute();
+      
+      JSONObject response = (JSONObject)parser.parse(httpResponse.parseAsString());
+      JSONArray results = (JSONArray)response.get("result");
+      return results;
+
+		
+	}
 	public static void main(String args[]){
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		Service service = new MQLService(key, "[{\"/organization/organization_founder/organizations_founded\": [{\"a:name\": null,\"name~=\": \"Microsoft\"}],\"id\": null,\"name\": null,\"type\": \"/organization/organization_founder\"}]");
+		Service service = new MQLService(key, "Microsoft");
 		service.requestInfo();
 	}
 }
