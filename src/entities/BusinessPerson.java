@@ -25,11 +25,14 @@ public class BusinessPerson extends Person{
 		if(this.getOrganizations().size() > 0){
 			System.out.println("Organizations associated with:");
 			for(Organization org : this.getOrganizations()){
+				System.out.println();
 				if(org.getFoundedBy())
 					System.out.println(this.getName() + " founded "+org.getName());
+				System.out.println();
 				if(org.getIsLeaderOf()){
 					System.out.println(this.getName() + " is leader of "+org.getName() + " with title "+org.getLeaderTitle() + ", role "+org.getLeaderRole()+" from "+org.getLeaderFrom()+" to "+org.getLeaderTo());
 				}
+				System.out.println();
 				if(org.getIsMemberOf()){
 					System.out.println(this.getName() + " is board member of "+org.getName() + " with title "+org.getBoardMemberTitle() + ", role "+org.getBoardMemberRole() +" from "+org.getBoardMemberFrom() +" to "+org.getBoardMemberTo());
 				}

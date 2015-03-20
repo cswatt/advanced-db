@@ -139,20 +139,20 @@ public class Person {
 		if(siblings.size() > 0){
 			System.out.print("Siblings: ");
 			for(String sibling : siblings)
-				System.out.println(sibling+" ");
+				System.out.println("\t"+sibling+" ");
 			System.out.println();
 		}
 		if(spouses.size() > 0){
 			System.out.print("Spouses: ");
 			for(String spouse : spouses)
-				System.out.println(spouse+" ");
+				System.out.println("\t"+spouse+" ");
 			System.out.println();
 		}
 		
 		if(description!=null && !description.equals("")){
 			System.out.println("Description: "+description);
 		}
-		
+		System.out.println();
 		if(isBusinessPerson){
 			System.out.println("He is a business person: YES");
 		}

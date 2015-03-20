@@ -14,6 +14,7 @@ import com.jayway.jsonpath.JsonPath;
 import entities.Actor;
 import entities.Author;
 import entities.BusinessPerson;
+import entities.Film;
 import entities.League;
 import entities.Organization;
 import entities.Person;
@@ -99,6 +100,9 @@ public class TopicResult extends Result{
 			}
 			if(type.equals(Type.AUTHOR)){
 				processAuthorType();
+			}
+			if(type.equals(Type.ACTOR)){
+				processActorType();
 			}
 		}
 	}
@@ -318,6 +322,55 @@ public class TopicResult extends Result{
 				influencedBy.add(p.getText());
 			}
 			author.setInfluencedBy(influencedBy);
+		}
+	}
+	
+	private void processActorType(){
+		if(person == null)
+			return;
+		
+		actor = new Actor(person.getName(),person.getDateOfBirth(),person.getPlaceOfBirth());
+		person.setIsActor(true);
+		
+		if(topic.toString().contains("\\/film\\/actor\\/film")){
+			List<Film> actorsfilms = new ArrayList<Film>();
+			
+			String filmName = null;
+			String character = null;
+			
+			String filmsmade = JsonPath.read(topic,"$.property['/film/actor/film']").toString();
+			Values films = gson.fromJson(filmsmade, Values.class);
+			for(Value f : films.getValues()){
+				if(f.getProperty().toString().contains("\\/film\\/performance\\/character"))
+					character = JsonPath.read(f.getProperty(),"$./film/performance/character.values[0].text").toString();
+				
+				if(f.getProperty().toString().contains("\\/film\\/performance\\/film"))
+					filmName = JsonPath.read(f.getProperty(),"$./film/performance/film.values[0].text").toString();
+				
+				actorsfilms.add(new Film(filmName, character));
+			}
+			
+			actor.setMovies(actorsfilms);
+		}
+		if(topic.toString().contains("\\/tv\\/tv_actor\\/starring_roles")){
+			List<Film> actorsfilms = new ArrayList<Film>();
+			
+			String filmName = null;
+			String character = null;
+			
+			String filmsmade = JsonPath.read(topic,"$.property['/tv/tv_actor/starring_roles']").toString();
+			Values films = gson.fromJson(filmsmade, Values.class);
+			for(Value f : films.getValues()){
+				if(f.getProperty().toString().contains("\\/tv\\/regular_tv_appearance\\/character"))
+					character = JsonPath.read(f.getProperty(),"$./tv/regular_tv_appearance/character.values[0].text").toString();
+				
+				if(f.getProperty().toString().contains("\\/tv\\/regular_tv_appearance\\/series"))
+					filmName = JsonPath.read(f.getProperty(),"$./tv/regular_tv_appearance/series.values[0].text").toString();
+				
+				actorsfilms.add(new Film(filmName, character));
+			}
+			
+			actor.setTvShows(actorsfilms);
 		}
 	}
 	

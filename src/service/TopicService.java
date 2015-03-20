@@ -3,7 +3,6 @@ package service;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import result.Result;
 import result.TopicResult;
 
 import com.google.api.client.http.GenericUrl;
@@ -12,7 +11,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.jayway.jsonpath.JsonPath;
 
 public class TopicService extends Service{
 
@@ -53,9 +51,14 @@ public class TopicService extends Service{
 		      
 		      result.parseTopic();
 		      
-		      result.getPerson().print();
-		      result.getBusinessPerson().print();
-		      result.getAuthor().print();
+		      if(result.getPerson() != null)
+		    	  result.getPerson().print();
+		      if(result.getBusinessPerson() != null)
+		    	  result.getBusinessPerson().print();
+		      if(result.getAuthor() != null)
+		    	  result.getAuthor().print();
+		      if(result.getActor() != null)
+		    	  result.getActor().print();
 		      
 		    } catch (Exception ex) {
 		      ex.printStackTrace();
@@ -66,7 +69,7 @@ public class TopicService extends Service{
 	public static void main(String[] args) {
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
 		
-		Service service = new TopicService(key,"/m/017nt");
+		Service service = new TopicService(key,"/m/016z2j");
 		service.requestInfo();
 	}
 
