@@ -16,7 +16,9 @@ public class Organization {
 	private String boardMemberFrom;
 	private String boardMemberTo; 
 	
-	private String foundedBy;
+	private boolean foundedBy;
+	private boolean isLeaderOf;
+	private boolean isMemberOf;
 	
 	public Organization(String name){
 		this.name = name;
@@ -94,11 +96,27 @@ public class Organization {
 		this.boardMemberTo = boardMemberTo;
 	}
 	
-	public String getFoundedBy(){
+	public boolean getFoundedBy(){
 		return this.foundedBy;
 	}
 	
-	public void setFoundedBy(String foundedBy){
+	public void setFoundedBy(boolean foundedBy){
 		this.foundedBy = foundedBy;
+	}
+	
+	public boolean getIsMemberOf(){
+		return this.isMemberOf;
+	}
+	
+	public void setIsMemberOf(boolean isMemberOf){
+		this.isMemberOf = isMemberOf;
+	}
+	
+	public boolean getIsLeaderOf(){
+		return this.isLeaderOf;
+	}
+	
+	public void setIsLeaderOf(boolean isLeaderOf){
+		this.isLeaderOf = isLeaderOf;
 	}
 }

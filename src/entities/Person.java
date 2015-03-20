@@ -153,8 +153,9 @@ public class Person {
 			System.out.println("Description: "+description);
 		}
 		
-		if(isBusinessPerson)
+		if(isBusinessPerson){
 			System.out.println("He is a business person: YES");
+		}
 		else
 			System.out.println("He is a business person: NO");
 		
