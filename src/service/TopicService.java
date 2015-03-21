@@ -17,6 +17,7 @@ public class TopicService extends Service{
 	private String topicId;
 	private String apiKey;
 	private String filter;
+	private TopicResult result;
 	
 	public TopicService(String apiKey, String topicId){
 		this.topicId = topicId;
@@ -37,10 +38,10 @@ public class TopicService extends Service{
 		      JSONObject topic = (JSONObject)parser.parse(httpResponse.parseAsString());
 		     
 		      //System.out.println(JsonPath.read(topic,"$.property['/type/object/name'].values[0].value").toString());
-		      TopicResult result = new TopicResult(topic);
+		      result = new TopicResult(topic);
 		      
 		      result.parseTopic();
-		      
+		      /*
 		      if(result.getPerson() != null)
 		    	  result.getPerson().print();
 		      if(result.getBusinessPerson() != null)
@@ -53,12 +54,15 @@ public class TopicService extends Service{
 		    	  result.getLeague().print();
 		      if(result.getTeam() != null)
 		    	  result.getTeam().print();
+		      */
 		      
 		    } catch (Exception ex) {
 		      ex.printStackTrace();
 		    }
 	}
-	
+	public TopicResult getResult(){
+		return result;
+	}
 	//temporary for testing purposes
 	public static void main(String[] args) {
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
