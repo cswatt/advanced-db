@@ -27,28 +27,28 @@ public class SearchResult extends Result{
 		name = JsonPath.read(search,"$.name").toString();
 		notable_id = JsonPath.read(search, "$.notable.id").toString();
 	}
-	private void setMid(String s){
+	public void setMid(String s){
 		this.mid = s;
 	}
-	private String getMid(){
+	public String getMid(){
 		return mid;
 	}
-	private void setId(String s){
+	public void setId(String s){
 		this.id = s;
 	}
-	private String getId(){
+	public String getId(){
 		return id;
 	}
-	private void setName(String s){
+	public void setName(String s){
 		this.name = s;
 	}
-	private String getName(){
+	public String getName(){
 		return name;
 	}
-	private void setNotableId(String s){
+	public void setNotableId(String s){
 		this.notable_id = s;
 	}
-	private String getNotableId(){
+	public String getNotableId(){
 		return notable_id;
 	}
 	//test
