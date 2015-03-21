@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Actor extends Person{
@@ -25,6 +26,13 @@ public class Actor extends Person{
 	
 	public void setTvShows(List<Film> tvShows){
 		this.tvShows = tvShows;
+	}
+	
+	public List<Film> getFilmography(){
+		List<Film> filmography = new ArrayList<Film>();
+		filmography.addAll(movies);
+		filmography.addAll(tvShows);
+		return filmography;
 	}
 	
 	public void print(){
