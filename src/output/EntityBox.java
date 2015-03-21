@@ -43,9 +43,6 @@ public class EntityBox extends Output{
 	
 	public void printPerson(){
 		Person p = result.getPerson();
-		if (p==null){
-			System.out.println("no person?");
-		}
 		String name = p.getName();
 		String dateOfBirth = p.getDateOfBirth();
 		String placeOfBirth = p.getPlaceOfBirth();
@@ -88,7 +85,7 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
-	    // and description
+	    // TODO description
 	    System.out.println(fmt); 
 		
 	}
@@ -222,7 +219,7 @@ public class EntityBox extends Output{
 	    	fmt.format("| %-20s %-80s|\n", "Slogan:", slogan);
 	    	fmt.format(newline());
 	    }
-	    // deeescription
+	    // TODO description
 	    if (teams != null && teams.size() > 0) {
 	    	fmt.format("| %-20s %-80s|\n", "Books:", teams.get(0).getName());
 	    	if (teams.size() > 1){
@@ -264,12 +261,64 @@ public class EntityBox extends Output{
 	    	fmt.format("| %-20s %-80s|\n", "Arena:", arena);
 	    	fmt.format(newline());
 	    }
-	    // championships
+	    if (championships != null && championships.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Championships:", championships.get(0));
+	    	if (championships.size() > 1){
+	    		for (String championship : championships.subList(1, championships.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", championship);
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
 	    if (founded != null){
 	    	fmt.format("| %-20s %-80s|\n", "Founded:", founded);
 	    	fmt.format(newline());
 	    }
-	    //leauges, locations, players
+	    if (leagues != null && leagues.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Leagues:", leagues.get(0).getName());
+	    	if (leagues.size() > 1){
+	    		for (League league : leagues.subList(1, leagues.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", league.getName());
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+	    if (locations != null && locations.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Locations:", locations.get(0));
+	    	if (locations.size() > 1){
+	    		for (String location : locations.subList(1, locations.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", location);
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+	    if (coaches != null){
+			//Collections.sort(films);
+			fmt.format("| %-20s |%-25s|%-25s|%-25s|\n", "Coaches","Name", "Position", "From/To");
+			fmt.format("| %-20s %-80s|\n", "",snewline());
+			for (Coach coach : coaches){
+				String posString = "";
+				for (String p : coach.getPositions()){
+					posString = posString + p + ", ";
+				}
+				fmt.format("| %-20s |%-25s|%-25s|%-25s|\n", "",coach.getName(),posString, coach.getFrom() + " / " + coach.getTo());
+			}
+			fmt.format(newline());
+		}
+	    if (players != null){
+			//Collections.sort(films);
+			fmt.format("| %-20s |%-25s|%-25s|%-25s|%-25s|\n", "Players","Name", "Position", "Number", "From/To");
+			fmt.format("| %-20s %-80s|\n", "",snewline());
+			for (Player player : players){
+				String posString = "";
+				for (String p : player.getPositions()){
+					posString = posString + p + ", ";
+				}
+				fmt.format("| %-20s |%-25s|%-25s|%-25s|%-25s|\n", "",player.getName(),posString, player.getNumber(), player.getFrom() + " / " + player.getTo());
+			}
+			fmt.format(newline());
+		}
+	    //TODO description
 	    System.out.println(fmt); 
 		
 	}
