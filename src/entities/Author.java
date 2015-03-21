@@ -37,11 +37,11 @@ public class Author extends Person{
 		this.influencedBy = influencedBy;
 	}
 	
-	public List<String> getBookAboutTheAuthor(){
+	public List<String> getBooksAboutTheAuthor(){
 		return this.booksAboutTheAuthor;
 	}
 	
-	public void setBookAboutTheAuthor(List<String> booksAboutTheAuthor){
+	public void setBooksAboutTheAuthor(List<String> booksAboutTheAuthor){
 		this.booksAboutTheAuthor = booksAboutTheAuthor;
 	}
 	
