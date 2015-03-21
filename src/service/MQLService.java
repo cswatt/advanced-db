@@ -26,15 +26,7 @@ public class MQLService extends Service{
 	private String query;
 	private String apiKey;
 	private MQLResult result;
-	
-	private HttpTransport httpTransport;
-	private HttpRequestFactory requestFactory;
-	private HttpRequest request;
-	private HttpResponse httpResponse;
-	
-	private GenericUrl url;
-	JSONParser parser = new JSONParser();
-	
+
 	public MQLService(String apiKey, String query){
 		this.query = query;
 		this.apiKey = apiKey;

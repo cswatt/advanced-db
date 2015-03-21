@@ -22,14 +22,7 @@ import org.json.simple.parser.ParseException;
 public class SearchService extends Service{
 	private String query;
 	private String apiKey;
-	
-	private HttpTransport httpTransport;
-	private HttpRequestFactory requestFactory;
-	private HttpRequest request;
-	private HttpResponse httpResponse;
-	
-	private GenericUrl url;
-	JSONParser parser = new JSONParser();
+	private SearchResult result;
 	
 	private HashSet<String> types = new HashSet<String>();
 	
@@ -79,7 +72,8 @@ public class SearchService extends Service{
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} 
-		Result res = new SearchResult(found_result);
+		SearchResult r = new SearchResult(found_result);
+		setResult(r);
 	}
 	
 
@@ -98,6 +92,14 @@ public class SearchService extends Service{
 		JSONObject response = (JSONObject)parser.parse(httpResponse.parseAsString());
 		results = (JSONArray)response.get("result");
 		return results;
+	}
+	
+	public void setResult(SearchResult result){
+		this.result = result;
+	}
+	
+	public SearchResult getResult(){
+		return result;
 	}
 	
 	//for testin' stuff

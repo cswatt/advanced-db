@@ -18,16 +18,6 @@ public class TopicService extends Service{
 	private String apiKey;
 	private String filter;
 	
-	//if these are common for all services move it to the abstract class
-	private HttpTransport httpTransport;
-	private HttpRequestFactory requestFactory;
-	private HttpRequest request;
-	private HttpResponse httpResponse;
-	
-	private GenericUrl url;
-	
-	private JSONParser parser = new JSONParser();
-	
 	public TopicService(String apiKey, String topicId){
 		this.topicId = topicId;
 		this.apiKey = apiKey;
