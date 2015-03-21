@@ -18,7 +18,6 @@ public class SearchResult extends Result{
 	public SearchResult(JSONObject search){
 		this.search = search;
 		parse();
-		System.out.println(toString());
 	}
 	
 	private void parse(){
@@ -50,11 +49,6 @@ public class SearchResult extends Result{
 	}
 	public String getNotableId(){
 		return notable_id;
-	}
-	//test
-	public String toString(){
-		String s = "mid: " + mid + "; id: " + id + "; name:" + name;
-		return s;
 	}
 	
 }
