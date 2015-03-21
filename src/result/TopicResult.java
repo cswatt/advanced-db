@@ -305,7 +305,7 @@ public class TopicResult extends Result{
 			for(Value book : books.getValues()){
 				bookTitles.add(book.getText());
 			}
-			author.setBookAboutTheAuthor(bookTitles);
+			author.setBooksAboutTheAuthor(bookTitles);
 		}
 		
 		if(topic.toString().contains("\\/influence\\/influence_node\\/influenced")){
