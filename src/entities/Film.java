@@ -1,6 +1,6 @@
 package entities;
 
-public class Film {
+public class Film implements Comparable<Film>{
 	
 	private String name;
 	private String character;
@@ -24,5 +24,8 @@ public class Film {
 	
 	public void setCharacter(String character){
 		this.character = character;
+	}
+	public int compareTo(Film otherfilm){
+		return name.compareTo(otherfilm.getName());
 	}
 }
