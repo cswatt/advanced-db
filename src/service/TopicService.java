@@ -41,7 +41,7 @@ public class TopicService extends Service{
 		      result = new TopicResult(topic);
 		      
 		      result.parseTopic();
-		      /*
+		      
 		      if(result.getPerson() != null)
 		    	  result.getPerson().print();
 		      if(result.getBusinessPerson() != null)
@@ -54,7 +54,7 @@ public class TopicService extends Service{
 		    	  result.getLeague().print();
 		      if(result.getTeam() != null)
 		    	  result.getTeam().print();
-		      */
+		      
 		      
 		    } catch (Exception ex) {
 		      ex.printStackTrace();
