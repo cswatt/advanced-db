@@ -89,32 +89,23 @@ public class TopicResult extends Result{
 	}
 	
 	private void processTypes(){
-
-		for(Type type : types){
-			//This is a person
-			if(type.equals(Type.PERSON)){
-				processPersonType();
-			}
-			//This is a business person
-			if(type.equals(Type.BUSINESSPERSON)){
+		if(types.contains(Type.PERSON)){
+			processPersonType();
+			if(types.contains(Type.BUSINESSPERSON)){
 				processBusinessPersonType();
 			}
-			//This is an author
-			if(type.equals(Type.AUTHOR)){
+			if(types.contains(Type.AUTHOR)){
 				processAuthorType();
 			}
-			//This is an actor
-			if(type.equals(Type.ACTOR)){
+			if(types.contains(Type.ACTOR)){
 				processActorType();
 			}
-			//This is a league
-			if(type.equals(Type.LEAGUE)){
-				processLeagueType();
-			}
-			//This is a team
-			if(type.equals(Type.TEAM)){
-				processTeamType();
-			}
+		}
+		else if(types.contains(Type.LEAGUE)){
+			processLeagueType();
+		}
+		else if(types.contains(Type.TEAM)){
+			processTeamType();
 		}
 	}
 	
