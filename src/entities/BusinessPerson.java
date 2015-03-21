@@ -1,13 +1,14 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessPerson extends Person{
 	
 	private List<Organization> organizations;
-	private List<Organization> organizations_led;
-	private List<Organization> organizations_onboard;
-	private List<Organization> organizations_founded;
+	private List<Organization> organizations_led = new ArrayList<Organization>();
+	private List<Organization> organizations_onboard = new ArrayList<Organization>();
+	private List<Organization> organizations_founded = new ArrayList<Organization>();
 	
 	public BusinessPerson(String name,String dateOfBirth,String placeOfBirth){
 		super(name,dateOfBirth,placeOfBirth);
@@ -22,29 +23,30 @@ public class BusinessPerson extends Person{
 	public void setOrganizations(List<Organization> organizations){
 		this.organizations = organizations;
 		sortOrgs();
+		
 	}
 	
 	public void sortOrgs(){
 		for(Organization org : this.getOrganizations()){
 			if(org.getFoundedBy()){
-				organizations_founded.add(org);
+				this.organizations_founded.add(org);
 			}
 			if(org.getIsLeaderOf()){
-				organizations_led.add(org);
+				this.organizations_led.add(org);
 			}
 			if(org.getIsMemberOf()){
-				organizations_onboard.add(org);
+				this.organizations_onboard.add(org);
 			}
 		}
 	}
 	public List<Organization> getOrgsFounded(){
-		return organizations_founded;
+		return this.organizations_founded;
 	}
 	public List<Organization> getOrgsLed(){
-		return organizations_led;
+		return this.organizations_led;
 	}
 	public List<Organization> getOrgsOnboard(){
-		return organizations_onboard;
+		return this.organizations_onboard;
 	}
 	public void print(){
 		
