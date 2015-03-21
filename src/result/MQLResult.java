@@ -17,7 +17,6 @@ import com.jayway.jsonpath.JsonPath;
 
 
 public class MQLResult extends Result{
-	private static final long serialVersionUID = -7934442049449016087L;
 	private Map<List<String>, List<String>> mql_map = new HashMap<List<String>, List<String>>();
 	private JSONArray book_results;
 	private JSONArray organization_results;
@@ -42,8 +41,6 @@ public class MQLResult extends Result{
 			List<String> organizations = JsonPath.read(res,"$./organization/organization_founder/organizations_founded[*].a:name");
 			mql_map.put(businessperson_tuple, organizations);
 		}
-		QueryBox q = new QueryBox(this);
-		q.print();
 	}
 	
 	public void setBookResults(JSONArray book_results){

@@ -20,9 +20,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import output.QueryBox;
+
 public class MQLService extends Service{
 	private String query;
 	private String apiKey;
+	private MQLResult result;
 	
 	private HttpTransport httpTransport;
 	private HttpRequestFactory requestFactory;
@@ -31,21 +34,22 @@ public class MQLService extends Service{
 	
 	private GenericUrl url;
 	JSONParser parser = new JSONParser();
-
+	
 	public MQLService(String apiKey, String query){
 		this.query = query;
 		this.apiKey = apiKey;
+		requestInfo();
 	}
-	public void requestInfo(){
 	
+	public void requestInfo(){
 		try {
 			JSONArray book_results = MQLBook(query);
 			JSONArray organization_results = MQLOrganization(query);
-			MQLResult result = new MQLResult(book_results, organization_results);
+			MQLResult r = new MQLResult(book_results, organization_results);
+			setResult(r);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} 
-	    
 	}
 	
 	public JSONArray MQLBook(String init_query) throws IOException, ParseException{
@@ -70,12 +74,21 @@ public class MQLService extends Service{
       JSONObject response = (JSONObject)parser.parse(httpResponse.parseAsString());
       JSONArray results = (JSONArray)response.get("result");
       return results;
-
-		
 	}
+	
+	public void setResult(MQLResult result){
+		this.result = result;
+	}
+	
+	public MQLResult getResult(){
+		return result;
+	}
+	
 	public static void main(String args[]){
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		Service service = new MQLService(key, "Microsoft");
-		service.requestInfo();
+		MQLService service = new MQLService(key, "Microsoft");
+		MQLResult r = service.getResult();
+		QueryBox q = new QueryBox(r);
+		q.print();
 	}
 }
