@@ -555,7 +555,7 @@ public class TopicResult extends Result{
 		this.team.setChampionships(championships);
 		this.team.setCoaches(coaches);
 		this.team.setLeagues(leagues);
-		this.team.setPlayersRoaster(players);
+		this.team.setPlayersRoster(players);
 	}
 	
 	private Organization existsInOrganizations(List<Organization> organizations, String org_name){
