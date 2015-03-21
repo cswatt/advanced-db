@@ -11,7 +11,7 @@ public class Film implements Comparable<Film>{
 	}
 	
 	public String getName(){
-		return this.name;
+		return (this.name == null) ? "" : this.name;
 	}
 	
 	public void setName(String name){
@@ -19,13 +19,16 @@ public class Film implements Comparable<Film>{
 	}
 	
 	public String getCharacter(){
-		return this.character;
+		return (this.character == null) ? "" : this.character;
 	}
 	
 	public void setCharacter(String character){
 		this.character = character;
 	}
 	public int compareTo(Film otherfilm){
-		return name.compareTo(otherfilm.getName());
+		String a = name;
+		if (a==null) a = "";
+		return a.compareTo(otherfilm.getName());
 	}
+	
 }
