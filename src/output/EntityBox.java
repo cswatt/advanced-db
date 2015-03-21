@@ -103,8 +103,24 @@ public class EntityBox extends Output{
 		
 		System.out.println("BUSINESSPERSON");
 		Formatter fmt = new Formatter();
+		if (organizations_led.size() > 0) {
+			fmt.format("| %-20s|%-20s|%-19s|%-19s|%-19s|\n", "Leadership:", "Organization", "Role", "Title", "From-To");
+			for (Organization org : organizations_led){
+				fmt.format("| %-20s %-80s|\n", "",snewline());
+				fmt.format("| %-20s|%.20s|%.19s|%.19s|%.19s|\n", "", org.getName(), org.getLeaderRole(), org.getLeaderTitle(), org.getLeaderFrom() + " - " + org.getLeaderTo());
+			}
+	    	fmt.format(newline());
+	    }
+		if (organizations_onboard.size() > 0) {
+			fmt.format("| %-20s|%-20s|%-19s|%-19s|%-19s|\n", "Leadership:", "Organization", "Role", "Title", "From-To");
+			for (Organization org : organizations_onboard){
+				fmt.format("| %-20s %-80s|\n", "",snewline());
+				fmt.format("| %-20s|%.20s|%.19s|%.19s|%.19s|\n", "", org.getName(), org.getBoardMemberRole(), org.getBoardMemberTitle(), org.getBoardMemberFrom() + " - " + org.getBoardMemberTo());
+			}
+	    	fmt.format(newline());
+	    }
 		if (organizations_founded.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Founded:", organizations_founded.get(0));
+	    	fmt.format("| %-20s %-80s|\n", "Founded:", organizations_founded.get(0).getName());
 	    	if (organizations_founded.size() > 1){
 	    		for (Organization org : organizations_founded.subList(1, organizations_founded.size())){
 	    			fmt.format("| %-20s %-80s|\n", "", org.getName());
@@ -117,10 +133,8 @@ public class EntityBox extends Output{
 	}	
 	public void printAuthor(){
 		Author a = result.getAuthor();
-		if (a==null){
-			System.out.println("no author");
-		}
-		System.out.println("AUTHOR");
+		List<String> books = a.getBooks();
+		List<String> booksabout = a.getBooksAboutTheAuthor();
 	}
 	public void printActor(){
 		Actor a = result.getActor();
@@ -145,6 +159,9 @@ public class EntityBox extends Output{
 	}
 	public String newline(){
 		return " -------------------------------------------------------------------------------------------------- \n";
+	}
+	public String snewline(){
+		return "----------------------------------------------------------------------------------";
 	}
 	public void center(String fmtStr, Formatter f, Object obj, int width){
 		String str; 
