@@ -5,6 +5,9 @@ import java.util.List;
 public class BusinessPerson extends Person{
 	
 	private List<Organization> organizations;
+	private List<Organization> organizations_led;
+	private List<Organization> organizations_onboard;
+	private List<Organization> organizations_founded;
 	
 	public BusinessPerson(String name,String dateOfBirth,String placeOfBirth){
 		super(name,dateOfBirth,placeOfBirth);
@@ -18,8 +21,31 @@ public class BusinessPerson extends Person{
 	
 	public void setOrganizations(List<Organization> organizations){
 		this.organizations = organizations;
+		sortOrgs();
 	}
 	
+	public void sortOrgs(){
+		for(Organization org : this.getOrganizations()){
+			if(org.getFoundedBy()){
+				organizations_founded.add(org);
+			}
+			if(org.getIsLeaderOf()){
+				organizations_led.add(org);
+			}
+			if(org.getIsMemberOf()){
+				organizations_onboard.add(org);
+			}
+		}
+	}
+	public List<Organization> getOrgsFounded(){
+		return organizations_founded;
+	}
+	public List<Organization> getOrgsLed(){
+		return organizations_led;
+	}
+	public List<Organization> getOrgsOnboard(){
+		return organizations_onboard;
+	}
 	public void print(){
 		
 		if(this.getOrganizations().size() > 0){
