@@ -192,10 +192,48 @@ public class EntityBox extends Output{
 	}
 	public void printLeague(){
 		League l = result.getLeague();
-		if (l==null){
-			System.out.println("no league");
-		}
-		System.out.println("LEAGUE");
+		String name = l.getName();
+		String championship = l.getChampionship();
+		String sport = l.getSport();
+		String slogan = l.getSlogan();
+		String website = l.getWebsite();
+		String description = l.getDescription();
+		List<Team> teams = l.getTeams();
+		
+		Formatter fmt = new Formatter();
+		fmt.format(newline());
+		fmt.format("|"); 
+	    center("%s", fmt, name, 100); 
+	    fmt.format("|\n");
+	    fmt.format(newline());
+	    if (sport != null){
+	    	fmt.format("| %-20s %-80s|\n", "Sport:", sport);
+	    	fmt.format(newline());
+	    }
+	    if (website != null){
+	    	fmt.format("| %-20s %-80s|\n", "Official Website:", website);
+	    	fmt.format(newline());
+	    }
+	    if (championship != null){
+	    	fmt.format("| %-20s %-80s|\n", "Championship:", championship);
+	    	fmt.format(newline());
+	    }
+	    if (slogan != null){
+	    	fmt.format("| %-20s %-80s|\n", "Slogan:", slogan);
+	    	fmt.format(newline());
+	    }
+	    // deeescription
+	    if (teams != null && teams.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Books:", teams.get(0).getName());
+	    	if (teams.size() > 1){
+	    		for (Team team : teams.subList(1, teams.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", team.getName());
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+		System.out.println(fmt); 
+	    
 	}
 	public void printTeam(){
 		Team t = result.getTeam();
