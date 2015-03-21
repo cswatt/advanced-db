@@ -69,7 +69,7 @@ public class EntityBox extends Output{
 	    }
 	    fmt.format("| %-20s %-80s|\n", "Place of birth:", placeOfBirth);
 	    fmt.format(newline());
-	    if (siblings.size() > 0) {
+	    if (siblings != null && siblings.size() > 0) {
 	    	fmt.format("| %-20s %-80s|\n", "Sibling(s):", siblings.get(0));
 	    	if (siblings.size() > 1){
 	    		for (String sibling : siblings.subList(1, siblings.size())){
@@ -78,7 +78,7 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
-	    if (spouses.size() > 0) {
+	    if (spouses != null && spouses.size() > 0) {
 	    	fmt.format("| %-20s %-80s|\n", "Spouse(s):", spouses.get(0));
 	    	if (spouses.size() > 1){
 	    		for (String spouse : spouses.subList(1, spouses.size())){
@@ -99,11 +99,9 @@ public class EntityBox extends Output{
 		List<Organization> organizations_founded = b.getOrgsFounded();
 		List<Organization> organizations_led = b.getOrgsLed();
 		List<Organization> organizations_onboard = b.getOrgsOnboard();
-		
-		
-		System.out.println("BUSINESSPERSON");
+	
 		Formatter fmt = new Formatter();
-		if (organizations_led.size() > 0) {
+		if (organizations_led != null && organizations_led.size() > 0) {
 			fmt.format("| %-20s|%-20s|%-19s|%-19s|%-19s|\n", "Leadership:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_led){
 				fmt.format("| %-20s %-80s|\n", "",snewline());
@@ -111,7 +109,7 @@ public class EntityBox extends Output{
 			}
 	    	fmt.format(newline());
 	    }
-		if (organizations_onboard.size() > 0) {
+		if (organizations_onboard != null && organizations_onboard.size() > 0) {
 			fmt.format("| %-20s|%-20s|%-19s|%-19s|%-19s|\n", "Leadership:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_onboard){
 				fmt.format("| %-20s %-80s|\n", "",snewline());
@@ -119,7 +117,7 @@ public class EntityBox extends Output{
 			}
 	    	fmt.format(newline());
 	    }
-		if (organizations_founded.size() > 0) {
+		if (organizations_founded != null && organizations_founded.size() > 0) {
 	    	fmt.format("| %-20s %-80s|\n", "Founded:", organizations_founded.get(0).getName());
 	    	if (organizations_founded.size() > 1){
 	    		for (Organization org : organizations_founded.subList(1, organizations_founded.size())){
@@ -135,6 +133,47 @@ public class EntityBox extends Output{
 		Author a = result.getAuthor();
 		List<String> books = a.getBooks();
 		List<String> booksabout = a.getBooksAboutTheAuthor();
+		List<String> influenced = a.getInfluenced();
+		List<String> influencedby = a.getInfluencedBy();
+		
+		Formatter fmt = new Formatter();
+		if (books != null && books.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Books:", books.get(0));
+	    	if (books.size() > 1){
+	    		for (String book : books.subList(1, books.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", book);
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+		if (booksabout != null && booksabout.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Books about:", booksabout.get(0));
+	    	if (booksabout.size() > 1){
+	    		for (String book : booksabout.subList(1, booksabout.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", book);
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+		if (influenced != null && influenced.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Influenced:", influenced.get(0));
+	    	if (influenced.size() > 1){
+	    		for (String person : influenced.subList(1, influenced.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", person);
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+		if (influencedby != null && influencedby.size() > 0) {
+	    	fmt.format("| %-20s %-80s|\n", "Influenced by:", influencedby.get(0));
+	    	if (influencedby.size() > 1){
+	    		for (String person : influencedby.subList(1, influencedby.size())){
+	    			fmt.format("| %-20s %-80s|\n", "", person);
+	    		}
+	    	}
+	    	fmt.format(newline());
+	    }
+		System.out.println(fmt); 
 	}
 	public void printActor(){
 		Actor a = result.getActor();
