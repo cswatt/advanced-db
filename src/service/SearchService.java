@@ -10,64 +10,75 @@ import com.jayway.jsonpath.JsonPath;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 import result.Result;
 import result.SearchResult;
+import result.TopicResult;
+import result.Type;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import output.EntityBox;
+
 public class SearchService extends Service{
 	private String query;
 	private String apiKey;
 	private SearchResult result;
-	
-	private HashSet<String> types = new HashSet<String>();
+	private Set<Type> types = new HashSet<Type>();
+	//private HashSet<String> types = new HashSet<String>();
 	
 	public SearchService(String apiKey, String query){
 		this.query = query;
 		this.apiKey = apiKey;
-		
-		types.add("/people/person");
-		types.add("/book/author");
-		types.add("/film/actor");
-		types.add("/tv/tv_actor");
-		types.add("/organization/organization_founder");
-		types.add("/business/board_member");
-		types.add("/sports/sports_league");
-		types.add("/sports/sports_team");
-		types.add("/sports/professional_sports_team");
+		types.add(Type.PERSON);
+		types.add(Type.AUTHOR);
+		types.add(Type.ORGANIZATION_FOUNDER);
+		types.add(Type.BUSINESSPERSON);
+		types.add(Type.ACTOR);
+		types.add(Type.LEAGUE);
+		types.add(Type.TEAM);
 	}
 	
 	public void requestInfo(){
 		String mid = "";
-		String notable_id = "";
 		
 		JSONObject found_result = null;
 		
 		try {
-			boolean found = false;
-			int limit = 5;
-			while(!found && limit <= 20){
-				JSONArray results = search(this.apiKey, this.query,  limit);
-				for (Object result : results){
-					mid = JsonPath.read(result,"$.mid").toString();
-					try{notable_id = JsonPath.read(result, "$.notable.id").toString();}
-					catch (Exception e){notable_id = "";}
-					if (types.contains(notable_id)){
-						found_result = (JSONObject)result;
-						found = true;
-						//System.out.println("found");
-						break;
-					}
+			int n = 1;
+			JSONArray results = search(this.apiKey, this.query,  20);
+			for (Object result : results){
+				mid = JsonPath.read(result,"$.mid").toString();
+				TopicService ts = new TopicService(apiKey, mid);
+				ts.requestInfo();
+				TopicResult tr = ts.getResult();
+				Set<Type> temp_types = tr.getTypes();
+				Set<Type> intersection = new HashSet<Type>(types);
+				intersection.retainAll(temp_types);
+				if (!intersection.isEmpty()){
+					found_result = (JSONObject)result;
+					break;
 				}
-				if (!found) System.out.println(limit + " Search API result entries were considered. None of them of a supported type.");
-				
-				if (limit == 20) System.out.println("nothing found");
-				
-				limit = limit + 5;
+				n++;
+				if (n==6){
+					System.out.println("searching next");
+					continue;
+				}
+				if (n==11){
+					System.out.println("searching next");
+					continue;
+				}
+				if (n==16){
+					System.out.println("searching next");
+					continue;
+				}
+				if (n==21){
+					System.out.println("giving up");
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -76,7 +87,6 @@ public class SearchService extends Service{
 		setResult(r);
 	}
 	
-
 	public JSONArray search(String apiKey, String query, int limit) throws IOException, ParseException{
 		JSONArray results = null;
 		this.httpTransport = new NetHttpTransport();
@@ -102,10 +112,17 @@ public class SearchService extends Service{
 		return result;
 	}
 	
-	//for testin' stuff
 	public static void main(String args[]){
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		Service service = new SearchService(key, "bill gates");
+		SearchService service = new SearchService(key, "donald trump");
 		service.requestInfo();
+		SearchResult sr = service.getResult();
+		String str = sr.getMid();
+		
+		TopicService t = new TopicService(key, str);
+		t.requestInfo();
+		TopicResult tr = t.getResult();
+		EntityBox e = new EntityBox(tr);
+		e.print();
 	}
 }
