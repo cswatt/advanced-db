@@ -14,10 +14,12 @@ import com.jayway.jsonpath.JsonPath;
 import entities.Actor;
 import entities.Author;
 import entities.BusinessPerson;
+import entities.Coach;
 import entities.Film;
 import entities.League;
 import entities.Organization;
 import entities.Person;
+import entities.Player;
 import entities.Team;
 
 public class TopicResult extends Result{
@@ -93,17 +95,25 @@ public class TopicResult extends Result{
 			if(type.equals(Type.PERSON)){
 				processPersonType();
 			}
+			//This is a business person
 			if(type.equals(Type.BUSINESSPERSON)){
 				processBusinessPersonType();
 			}
+			//This is an author
 			if(type.equals(Type.AUTHOR)){
 				processAuthorType();
 			}
+			//This is an actor
 			if(type.equals(Type.ACTOR)){
 				processActorType();
 			}
+			//This is a league
 			if(type.equals(Type.LEAGUE)){
 				processLeagueType();
+			}
+			//This is a team
+			if(type.equals(Type.TEAM)){
+				processTeamType();
 			}
 		}
 	}
@@ -415,6 +425,146 @@ public class TopicResult extends Result{
 		this.league.setDescription(description);
 		this.league.setTeams(teams);
 		
+	}
+	
+	private void processTeamType(){
+		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		String sport = JsonPath.read(topic,"$.property['/sports/sports_team/sport'].values[0].text").toString();
+		
+		String description = null;
+		String arena = null;
+		String foundedIn = null;
+		
+		List<String> locations = new ArrayList<String>();
+		List<String> championships = new ArrayList<String>();
+		
+		List<Coach> coaches = new ArrayList<Coach>();
+		List<League> leagues = new ArrayList<League>();
+		List<Player> players = new ArrayList<Player>();
+ 		
+		if(topic.toString().contains("\\/common\\/topic\\/description"))
+			description = JsonPath.read(topic,"$.property['/common/topic/description'].values[0].value").toString();
+		if(topic.toString().contains("\\/sports\\/sports_team\\/arena_stadium"))
+			arena = JsonPath.read(topic,"$.property['/sports/sports_team/arena_stadium'].values[0].text").toString();
+		if(topic.toString().contains("\\/sports\\/sports_team\\/founded"))
+			foundedIn = JsonPath.read(topic,"$.property['/sports/sports_team/founded'].values[0].text").toString();
+		
+		if(topic.toString().contains("\\/sports\\/sports_team\\/location")){
+			String locs = JsonPath.read(topic,"$.property['/sports/sports_team/location']").toString();
+			Values team_locations = gson.fromJson(locs, Values.class);
+			for(Value loc : team_locations.getValues()){
+				locations.add(loc.getText());
+			}
+		}
+		
+		if(topic.toString().contains("\\/sports\\/sports_team\\/championships")){
+			String champs = JsonPath.read(topic,"$.property['/sports/sports_team/championships']").toString();
+			Values team_championships = gson.fromJson(champs, Values.class);
+			for(Value champ : team_championships.getValues()){
+				championships.add(champ.getText());
+			}
+		}
+		
+		if(topic.toString().contains("\\/sports\\/sports_team\\/coaches")){
+			String team_coaches = JsonPath.read(topic,"$.property['/sports/sports_team/coaches']").toString();
+			Values tcoaches = gson.fromJson(team_coaches, Values.class);
+			
+			for(Value tcoach : tcoaches.getValues()){
+				String coach_name = null;
+				String coach_from = null;
+				String coach_to = null;
+				
+				List<String> coach_positions = new ArrayList<String>();
+			
+				if(tcoach.getProperty().toString().contains("\\/sports\\/sports_team_coach_tenure\\/coach"))
+					coach_name = JsonPath.read(tcoach.getProperty(),"$./sports/sports_team_coach_tenure/coach.values[0].text").toString();
+				if(tcoach.getProperty().toString().contains("\\/sports\\/sports_team_coach_tenure\\/from"))
+					coach_from = JsonPath.read(tcoach.getProperty(),"$./sports/sports_team_coach_tenure/from.values[0].text").toString();
+				if(tcoach.getProperty().toString().contains("\\/sports\\/sports_team_coach_tenure\\/position")){
+					
+					String cpos = JsonPath.read(tcoach.getProperty(),"$./sports/sports_team_coach_tenure/position.values[0].text").toString();
+					coach_positions.add(cpos);
+				}
+				if(tcoach.getProperty().toString().contains("\\/sports\\/sports_team_coach_tenure\\/to")){
+					String to = JsonPath.read(tcoach.getProperty(),"$./sports/sports_team_coach_tenure/to").toString();
+					if(to.contains("valuetype"))
+						coach_to = JsonPath.read(tcoach.getProperty(),"$./sports/sports_team_coach_tenure/to.values[0].text").toString();
+				}
+				
+				if(coach_to == null)
+					coach_to = "now";
+				
+				Coach coach = new Coach(coach_name);
+				coach.setFrom(coach_from);
+				coach.setTo(coach_to);
+				coach.setPositions(coach_positions);
+				coaches.add(coach);
+			}
+		}
+		
+		if(topic.toString().contains("\\/sports\\/sports_team\\/league")){
+			String team_leagues = JsonPath.read(topic,"$.property['/sports/sports_team/league']").toString();
+			Values tleagues = gson.fromJson(team_leagues, Values.class);
+			for(Value tleague : tleagues.getValues()){
+				String league_name = name;
+				
+				if(tleague.getProperty().toString().contains("\\/sports\\/sports_league_participation\\/league")){
+					league_name = JsonPath.read(tleague.getProperty(),"$./sports/sports_league_participation/league.values[0].text").toString();
+					leagues.add(new League(league_name));
+				}
+			}
+		}
+		
+		if(topic.toString().contains("\\/sports\\/sports_team\\/roster")){
+			String team_players = JsonPath.read(topic,"$.property['/sports/sports_team/roster']").toString();
+			Values tplayers = gson.fromJson(team_players, Values.class);
+			for(Value tplayer : tplayers.getValues()){
+				String player_name = null;
+				String player_num = null;
+				String player_from = null;
+				String player_to = null;
+				
+				List<String> player_positions = new ArrayList<String>();
+				
+				if(tplayer.getProperty().toString().contains("\\/sports\\/sports_team_roster\\/player"))
+					player_name = JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/player.values[0].text").toString();
+				if(tplayer.getProperty().toString().contains("\\/sports\\/sports_team_roster\\/from"))
+					player_from = JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/from.values[0].text").toString();
+				if(tplayer.getProperty().toString().contains("\\/sports\\/sports_team_roster\\/position")){
+					String ppos = JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/position").toString();
+					int count = Integer.parseInt(ppos.substring(ppos.indexOf("count=") + ("count=").length()).substring(0, 1));
+					for(int i=0;i<count;i++){
+						//System.out.println(JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/position.values["+i+"].text").toString());
+						player_positions.add(JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/position.values["+i+"].text").toString());
+					}
+				}
+				if(tplayer.getProperty().toString().contains("\\/sports\\/sports_team_roster\\/to"))
+					player_to = JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/to.values[0].text").toString();
+				if(tplayer.getProperty().toString().contains("\\/sports\\/sports_team_roster\\/number"))
+					player_num = JsonPath.read(tplayer.getProperty(),"$./sports/sports_team_roster/number.values[0].text").toString();
+				
+				if(player_to == null)
+					player_to = "now";
+				
+				Player player = new Player(player_name);
+				player.setFrom(player_from);
+				player.setNumber(player_num);
+				player.setTo(player_to);
+				player.setPositions(player_positions);
+				
+				players.add(player);
+			}
+		}
+		
+		this.team = new Team(name,sport);
+		this.team.setDescription(description);
+		this.team.setArena(arena);
+		this.team.setFoundedIn(foundedIn);
+		this.team.setLocations(locations);
+		this.team.setChampionships(championships);
+		this.team.setCoaches(coaches);
+		this.team.setLeagues(leagues);
+		this.team.setPlayersRoaster(players);
 	}
 	
 	private Organization existsInOrganizations(List<Organization> organizations, String org_name){

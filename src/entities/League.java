@@ -13,6 +13,10 @@ public class League {
 	
 	private List<Team> teams;
 	
+	public League(String name){
+		this.name = name;
+	}
+	
 	public League(String name, String sport, String championship){
 		this.name = name;
 		this.sport = sport;

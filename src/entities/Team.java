@@ -8,7 +8,7 @@ public class Team {
 	private String description;
 	private String sport;
 	private String arena;
-	private String foundedBy;
+	private String foundedIn;
 	
 	private List<String> championships;
 	private List<String> locations;
@@ -54,12 +54,12 @@ public class Team {
 		this.description = description;
 	}
 	
-	public String getFoundedBy(){
-		return this.foundedBy;
+	public String getFoundedIn(){
+		return this.foundedIn;
 	}
 	
-	public void setFoundedBy(String foundedBy){
-		this.foundedBy = foundedBy;
+	public void setFoundedIn(String foundedIn){
+		this.foundedIn = foundedIn;
 	}
 	
 	public List<String> getChampionships(){
@@ -100,5 +100,59 @@ public class Team {
 	
 	public void setPlayersRoaster(List<Player> playersRoaster){
 		this.playersRoaster = playersRoaster;
+	}
+	
+	public void print(){
+		System.out.println("---------------TEAM---------------");
+		
+		System.out.println("Name: "+ name);
+		System.out.println("Sport: "+sport);
+		System.out.println("Arena: "+arena);
+		System.out.println("Founded in: "+foundedIn);
+		System.out.println("Description: "+description);
+		System.out.println();
+		
+		if(!locations.isEmpty()){
+			System.out.println("Team "+this.name+" is the following locations:");
+			for(String loc : locations){
+				System.out.println(loc);
+			}
+		}
+		System.out.println();
+		if(!locations.isEmpty()){
+			System.out.println("Team "+this.name+" has the following championships:");
+			for(String champ : championships){
+				System.out.println(champ);
+			}
+		}
+		System.out.println();
+		if(!leagues.isEmpty()){
+			System.out.println("Team "+this.name+" has the following leagues:");
+			for(League league : leagues){
+				System.out.println(league.getName());
+			}
+		}
+		System.out.println();
+		if(!coaches.isEmpty()){
+			System.out.println("Team "+this.name+" has the following coaches:");
+			for(Coach coach : coaches){
+				System.out.print(coach.getName() + " served in positions:");
+				for(String pos : coach.getPositions())
+					System.out.print(pos+" ");
+				System.out.print(" from "+coach.getFrom()+" to "+coach.getTo());
+				System.out.println();
+			}
+		}
+		System.out.println();
+		if(!playersRoaster.isEmpty()){
+			System.out.println("Team "+this.name+" has the following players:");
+			for(Player player : playersRoaster){
+				System.out.print(player.getName() + "with number "+player.getNumber()+" served in positions:");
+				for(String pos : player.getPositions())
+					System.out.print(pos+" ");
+				System.out.print(" from "+player.getFrom()+" to "+player.getTo());
+				System.out.println();
+			}
+		}
 	}
 }

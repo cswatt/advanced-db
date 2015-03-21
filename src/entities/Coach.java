@@ -1,15 +1,22 @@
 package entities;
 
+import java.util.List;
+
 public class Coach {
 	
 	private String name;
-	private String position;
 	private String from;
 	private String to;
 	
-	public Coach(String name, String position){
+	private List<String> positions;
+	
+	public Coach(String name){
 		this.name = name;
-		this.position = position;
+	}
+	
+	public Coach(String name, List<String> positions){
+		this.name = name;
+		this.positions = positions;
 	}
 	
 	public String getName(){
@@ -20,12 +27,12 @@ public class Coach {
 		this.name = name;
 	}
 	
-	public String getPosition(){
-		return this.position;
+	public List<String> getPositions(){
+		return this.positions;
 	}
 	
-	public void setPosition(String position){
-		this.position = position;
+	public void setPositions(List<String> positions){
+		this.positions = positions;
 	}
 	
 	public String getFrom(){

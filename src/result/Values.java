@@ -15,6 +15,10 @@ public class Values implements JSONable{
     @SerializedName(value = "values")
 	protected List<Value> values = new ArrayList<Value>();
 	
+	@Expose
+    @SerializedName(value = "count")
+	protected int count = 0;
+	
 	public Values(){
 		
 	}
@@ -25,6 +29,14 @@ public class Values implements JSONable{
 	
 	public void setValues(List<Value> values){
 		this.values = values;
+	}
+	
+	public int getCount(){
+		return this.count;
+	}
+	
+	public void setCount(int count){
+		this.count = count;
 	}
 	
 	public void printValues(String field){
