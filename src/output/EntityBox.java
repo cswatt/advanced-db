@@ -237,10 +237,41 @@ public class EntityBox extends Output{
 	}
 	public void printTeam(){
 		Team t = result.getTeam();
-		if (t==null){
-			System.out.println("no team");
-		}
-		System.out.println("TEAM");
+		String name = t.getName();
+		String description = t.getDescription();
+		String sport = t.getSport();
+		String arena = t.getArena();
+		List<String> championships = t.getChampionships();
+		List<Coach> coaches = t.getCoaches();
+		String founded = t.getFoundedIn();
+		List<League> leagues = t.getLeagues();
+		List<String> locations = t.getLocations();
+		List<Player> players = t.getPlayersRoster();
+		
+		Formatter fmt = new Formatter();
+		fmt.format(newline());
+		fmt.format("|"); 
+	    center("%s", fmt, name, 100); 
+	    fmt.format("|\n");
+	    fmt.format(newline());
+	    fmt.format("| %-20s %-80s|\n", "Name:", name);
+    	fmt.format(newline());
+	    if (sport != null){
+	    	fmt.format("| %-20s %-80s|\n", "Sport:", sport);
+	    	fmt.format(newline());
+	    }
+	    if (arena != null){
+	    	fmt.format("| %-20s %-80s|\n", "Arena:", arena);
+	    	fmt.format(newline());
+	    }
+	    // championships
+	    if (founded != null){
+	    	fmt.format("| %-20s %-80s|\n", "Founded:", founded);
+	    	fmt.format(newline());
+	    }
+	    //leauges, locations, players
+	    System.out.println(fmt); 
+		
 	}
 	public String newline(){
 		return " -------------------------------------------------------------------------------------------------- \n";
