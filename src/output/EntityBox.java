@@ -1,6 +1,7 @@
 package output;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Set;
@@ -177,10 +178,17 @@ public class EntityBox extends Output{
 	}
 	public void printActor(){
 		Actor a = result.getActor();
-		if (a==null){
-			System.out.println("no actor");
+		List<Film> films = a.getFilmography();
+		
+		Formatter fmt = new Formatter();
+		if (films != null){
+			Collections.sort(films);
+			fmt.format("| %-20s %-40s %-40s|\n", "Films","Character", "Film Name");
+			for (Film film : films){
+				fmt.format("| %-20s %-40s %-40s|\n", "",film.getCharacter(), film.getName());
+			}
 		}
-		System.out.println("ACTOR");
+		System.out.println(fmt); 
 	}
 	public void printLeague(){
 		League l = result.getLeague();
@@ -222,4 +230,5 @@ public class EntityBox extends Output{
 		Arrays.fill(pad, ' ');  
 		f.format(new String(pad)); 
 	}
+	
 }
