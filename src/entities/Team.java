@@ -15,7 +15,7 @@ public class Team {
 	
 	private List<Coach> coaches;
 	private List<League> leagues;
-	private List<Player> playersRoaster;
+	private List<Player> playersRoster;
 	
 	public Team(String name, String sport){
 		this.name = name;
@@ -94,12 +94,12 @@ public class Team {
 		this.leagues = leagues;
 	}
 	
-	public List<Player> getPlayersRoaster(){
-		return this.playersRoaster;
+	public List<Player> getPlayersRoster(){
+		return this.playersRoster;
 	}
 	
-	public void setPlayersRoaster(List<Player> playersRoaster){
-		this.playersRoaster = playersRoaster;
+	public void setPlayersRoster(List<Player> playersRoster){
+		this.playersRoster = playersRoster;
 	}
 	
 	public void print(){
@@ -144,9 +144,9 @@ public class Team {
 			}
 		}
 		System.out.println();
-		if(!playersRoaster.isEmpty()){
+		if(!playersRoster.isEmpty()){
 			System.out.println("Team "+this.name+" has the following players:");
-			for(Player player : playersRoaster){
+			for(Player player : playersRoster){
 				System.out.print(player.getName() + "with number "+player.getNumber()+" served in positions:");
 				for(String pos : player.getPositions())
 					System.out.print(pos+" ");
