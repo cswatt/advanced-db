@@ -126,11 +126,14 @@ public class TopicResult extends Result{
 		dateOfBirth = JsonPath.read(topic,"$.property['/people/person/date_of_birth'].values[0].text").toString();
 		placeOfBirth = JsonPath.read(topic,"$.property['/people/person/place_of_birth'].values[0].text").toString();
 		if(topic.toString().contains("\\/people\\/deceased_person\\/date_of_death"))
-			dateOfDeath = JsonPath.read(topic,"$.property['people/deceased_person/date_of_death'].values[0].text").toString();
+			dateOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/date_of_death'].values[0].text").toString();
 		if(topic.toString().contains("\\/people\\/deceased_person\\/place_of_death"))
 			dateOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/place_of_death'].values[0].text").toString();
-		if(topic.toString().contains("\\/people\\/deceased_person\\/cause_of_death"))
-			causeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death'].values[0].text").toString();
+		if(topic.toString().contains("\\/people\\/deceased_person\\/cause_of_death")){
+			if(JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death']").toString().contains("valuetype"))
+				causeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death'].values[0].text").toString();
+		}
+			
 		
 		//extract siblings
 		if(topic.toString().contains("\\/people\\/person\\/sibling_s")){
