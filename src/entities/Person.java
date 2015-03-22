@@ -13,7 +13,7 @@ public class Person {
 	private String causeOfDeath;
 	
 	private List<String> siblings;
-	private List<String> spouses;
+	private List<Spouse> spouses;
 	
 	private String description;
 	
@@ -83,11 +83,11 @@ public class Person {
 		this.siblings = siblings;
 	}
 	
-	public List<String> getSpouses(){
+	public List<Spouse> getSpouses(){
 		return this.spouses;
 	}
 	
-	public void setSpouses(List<String> spouses){
+	public void setSpouses(List<Spouse> spouses){
 		this.spouses = spouses;
 	}
 	
@@ -144,8 +144,8 @@ public class Person {
 		}
 		if(spouses.size() > 0){
 			System.out.print("Spouses: ");
-			for(String spouse : spouses)
-				System.out.println("\t"+spouse+" ");
+			for(Spouse spouse : spouses)
+				System.out.println("\t"+spouse.getName()+" from "+spouse.getFrom()+" to "+spouse.getTo()+" at "+spouse.getMarriageLocation());
 			System.out.println();
 		}
 		

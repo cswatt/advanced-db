@@ -67,7 +67,7 @@ public class EntityBox extends Output{
 		String dateOfDeath = p.getDateOfDeath();
 		String causeOfDeath = p.getCauseOfDeath();
 		List<String> siblings = p.getSiblings();
-		List<String> spouses = p.getSpouses();
+		List<Spouse> spouses = p.getSpouses();
 		String description = p.getDescription();
 		
 		Formatter fmt = new Formatter();
@@ -102,12 +102,12 @@ public class EntityBox extends Output{
 	    	fmt.format(newline());
 	    }
 	    
-	    // print spouses
+	    // print spouses -- extra fields need to be added 
 	    if (spouses != null && spouses.size() > 0) {
-	    	leftalign(fmt, "Spouse(s):", spouses.get(0));
+	    	leftalign(fmt, "Spouse(s):", spouses.get(0).getName());
 	    	if (spouses.size() > 1){
-	    		for (String spouse : spouses.subList(1, spouses.size())){
-	    			leftalign(fmt, "", spouse);
+	    		for (Spouse spouse : spouses.subList(1, spouses.size())){
+	    			leftalign(fmt, "", spouse.getName());
 	    		}
 	    	}
 	    	fmt.format(newline());
