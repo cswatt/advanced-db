@@ -78,7 +78,7 @@ public class MQLService extends Service{
 	
 	public static void main(String args[]){
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		MQLService service = new MQLService(key, "Microsoft");
+		MQLService service = new MQLService(key, "cats");
 		MQLResult r = service.getResult();
 		QueryBox q = new QueryBox(r);
 		q.print();

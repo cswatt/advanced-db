@@ -17,7 +17,7 @@ import com.jayway.jsonpath.JsonPath;
 
 
 public class MQLResult extends Result{
-	private Map<List<String>, List<String>> mql_map = new HashMap<List<String>, List<String>>();
+	private Map<Role, List<String>> mql_map = new HashMap<Role, List<String>>();
 	private JSONArray book_results;
 	private JSONArray organization_results;
 	
@@ -30,16 +30,16 @@ public class MQLResult extends Result{
 	private void parse(){
 		for (Object res : book_results){
 			String author = JsonPath.read(res,"$.name").toString();
-			List<String> author_tuple = Arrays.asList(author, "Author");
+			Role role = new Role(author, "Author");
 			List<String> books = JsonPath.read(res,"$./book/author/works_written[*].a:name");
-			mql_map.put(author_tuple, books);
+			mql_map.put(role, books);
 		}
 		
 		for (Object res : organization_results){
 			String businessperson = JsonPath.read(res,"$.name").toString();
-			List<String> businessperson_tuple = Arrays.asList(businessperson, "Businessperson");
+			Role role = new Role(businessperson, "Businessperson");
 			List<String> organizations = JsonPath.read(res,"$./organization/organization_founder/organizations_founded[*].a:name");
-			mql_map.put(businessperson_tuple, organizations);
+			mql_map.put(role, organizations);
 		}
 	}
 	
