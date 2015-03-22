@@ -30,8 +30,8 @@ public class Actor extends Person{
 	
 	public List<Film> getFilmography(){
 		List<Film> filmography = new ArrayList<Film>();
-		filmography.addAll(movies);
-		filmography.addAll(tvShows);
+		if (movies != null) filmography.addAll(movies);
+		if (tvShows != null) filmography.addAll(tvShows);
 		return filmography;
 	}
 	

@@ -43,7 +43,7 @@ public class QueryBox extends Output{
 		int i = 1;
 		for (String name : sorted_names){
 			List<String> titles = final_map.get(name);
-			String titlestring = listToString(titles);
+			String titlestring = listToString(titles, false);
 			System.out.print(i + ". " + name + " created " + titlestring);			
 			System.out.print("\n");
 			i++;

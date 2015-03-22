@@ -5,14 +5,18 @@ import java.util.List;
 public abstract class Output {
 	public abstract void print();
 	
-	public String listToString(List<String> list){
+	public String listToString(List<String> list, boolean simple){
 		String finalstring = "";
 		if (list.size() == 1){
 			finalstring = list.get(0);
 			return finalstring;
 		}
-		if (list.size() == 2){
+		if (list.size() == 2 && !simple){
 			finalstring = list.get(0) + " and " + list.get(1);
+			return finalstring;
+		}
+		if (list.size() == 2 && simple){
+			finalstring = list.get(0) + ", " + list.get(1);
 			return finalstring;
 		}
 		if (list.size() >= 3){
