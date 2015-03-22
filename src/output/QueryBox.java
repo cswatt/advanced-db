@@ -23,9 +23,17 @@ public class QueryBox extends Output{
 		Set<List<String>> keys = mql_map.keySet();
 		for (List<String> key : keys) {
 			String s = key.get(0) + " (as " + key.get(1) + ")";
-			List<String> l = (List<String>) mql_map.get(key);
+			List<String> l = angleBracket((List<String>) mql_map.get(key));
 			final_map.put(s, l);
 		}
+	}
+	
+	public List<String> angleBracket(List<String> list){
+		List<String> bracketed = new ArrayList<String>();
+		for (String s : list){
+			bracketed.add("<" + s + ">");
+		}
+		return bracketed;
 	}
 	
 	public void print(){
@@ -35,19 +43,8 @@ public class QueryBox extends Output{
 		int i = 1;
 		for (String name : sorted_names){
 			List<String> titles = final_map.get(name);
-			System.out.print(i + ". " + name + " created ");
-			if (titles.size() == 1) {
-				System.out.print("<" + titles.get(0) + ">");
-			}
-			else if (titles.size() == 2) {
-				System.out.print("<" + titles.get(0) + "> and <" + titles.get(1) + ">");
-			}
-			else if (titles.size() > 2){
-				for (String title : titles){
-					System.out.print("<" + title + ">, ");
-				}
-			}
-			
+			String titlestring = listToString(titles);
+			System.out.print(i + ". " + name + " created " + titlestring);			
 			System.out.print("\n");
 			i++;
 		}
