@@ -102,7 +102,10 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
-	    // TODO description
+	    if (description != null){
+	    	wrap(fmt, "Description", description);
+	    	fmt.format(newline());
+	    }
 	    System.out.print(fmt); 
 		
 	}
@@ -122,7 +125,7 @@ public class EntityBox extends Output{
 	    	fmt.format(newline());
 	    }
 		if (organizations_onboard != null && organizations_onboard.size() > 0) {
-			leftalign(fmt, "Leadership:", "Organization", "Role", "Title", "From-To");
+			leftalign(fmt, "Board member:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_onboard){
 				leftalign(fmt, "",snewline());
 				leftalign(fmt, "", org.getName(), org.getBoardMemberRole(), org.getBoardMemberTitle(), org.getBoardMemberFrom() + " - " + org.getBoardMemberTo());
@@ -234,7 +237,10 @@ public class EntityBox extends Output{
 	    	leftalign(fmt, "Slogan:", slogan);
 	    	fmt.format(newline());
 	    }
-	    // TODO description
+	    if (description != null){
+	    	wrap(fmt, "Description", description);
+	    	fmt.format(newline());
+	    }
 	    if (teams != null && teams.size() > 0) {
 	    	leftalign(fmt, "Teams:", teams.get(0).getName());
 	    	if (teams.size() > 1){
@@ -327,7 +333,10 @@ public class EntityBox extends Output{
 			}
 			fmt.format(newline());
 		}
-	    //TODO description
+	    if (description != null){
+	    	wrap(fmt, "Description", description);
+	    	fmt.format(newline());
+	    }
 	    System.out.println(fmt); 
 		
 	}
@@ -361,6 +370,17 @@ public class EntityBox extends Output{
 	public static void leftalign(Formatter f, String label, String value){
 		String fmtstr = "| %-17s%-80s|\n"; //97
 		f.format(fmtstr, label, truncate(value, 80));
+	}
+	
+	public static void wrap(Formatter f, String  label, String value){
+		value = value.replace("\n", "");
+		String fmtstr = "| %-17s%-80s|\n";
+		int lines = value.length()/80;
+		f.format(fmtstr, label, value.substring(0, 80));
+		for (int i = 1; i < lines ; i++){
+			f.format(fmtstr, "", value.substring(i * 80, i * 80 + 80));
+		}
+		f.format(fmtstr, "", value.substring(lines * 80, value.length()));
 	}
 	
 	public static void leftalign(Formatter f, String label, String value1, String value2){
@@ -397,6 +417,8 @@ public class EntityBox extends Output{
 		leftalign(f, "", snewline());
 		leftalign(f, "", "Alice", "asdf", "asdf", "asdf");
 		leftalign(f, "", "Bob", "asdf", "asdf", "asdf");
+		f.format(newline());
+		wrap(f, "description", "Icelandic magical staves (sigils) are symbols credited with magical effect preserved in various grimoires dating from the 17th century and later. According to the Museum of Icelandic Sorcery and Witchcraft, the effects credited to most of the staves were very relevant to the average Icelanders of the time, who were mostly subsistence farmers and had to deal with harsh climatic conditions.");
 		f.format(newline());
 		System.out.println(f); 
 	}
