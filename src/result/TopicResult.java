@@ -56,10 +56,6 @@ public class TopicResult extends Result{
 				types.add(Type.AUTHOR);
 				continue;
 			}
-			if(value.getId().equals("/organization/organization_founder")){
-				types.add(Type.ORGANIZATION_FOUNDER);
-				continue;
-			}
 			if(value.getId().equals("/business/board_member")){
 				types.add(Type.BUSINESSPERSON);
 				continue;

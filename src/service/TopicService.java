@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import result.TopicResult;
+import result.Type;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -17,6 +18,7 @@ public class TopicService extends Service{
 	private String topicId;
 	private String apiKey;
 	private String filter;
+	
 	private TopicResult result;
 	
 	public TopicService(String apiKey, String topicId){
@@ -37,38 +39,38 @@ public class TopicService extends Service{
 		      
 		      JSONObject topic = (JSONObject)parser.parse(httpResponse.parseAsString());
 		     
-		      //System.out.println(JsonPath.read(topic,"$.property['/type/object/name'].values[0].value").toString());
-		      result = new TopicResult(topic);
+		      this.result = new TopicResult(topic);
 		      
-		      result.parseTopic();
-		      
-		      if(result.getPerson() != null)
-		    	  result.getPerson().print();
-		      if(result.getBusinessPerson() != null)
-		    	  result.getBusinessPerson().print();
-		      if(result.getAuthor() != null)
-		    	  result.getAuthor().print();
-		      if(result.getActor() != null)
-		    	  result.getActor().print();
-		      if(result.getLeague() != null)
-		    	  result.getLeague().print();
-		      if(result.getTeam() != null)
-		    	  result.getTeam().print();
-		      
-		      
+		      this.result.parseTopic();
+		
 		    } catch (Exception ex) {
 		      ex.printStackTrace();
 		    }
 	}
 	public TopicResult getResult(){
-		return result;
+		return this.result;
 	}
 	//temporary for testing purposes
 	public static void main(String[] args) {
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
 		
-		Service service = new TopicService(key,"/m/0jm3v");
+		TopicService service = new TopicService(key,"/m/081k8");
 		service.requestInfo();
+		
+	      
+	      if(service.getResult().getPerson() != null)
+	    	  service.getResult().getPerson().print();
+	      if(service.getResult().getBusinessPerson() != null)
+	    	  service.getResult().getBusinessPerson().print();
+	      if(service.getResult().getAuthor() != null)
+	    	  service.getResult().getAuthor().print();
+	      if(service.getResult().getActor() != null)
+	    	  service.getResult().getActor().print();
+	      if(service.getResult().getLeague() != null)
+	    	  service.getResult().getLeague().print();
+	      if(service.getResult().getTeam() != null)
+	    	  service.getResult().getTeam().print();
+	      
 	}
 
 }

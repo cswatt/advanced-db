@@ -36,7 +36,6 @@ public class SearchService extends Service{
 		this.apiKey = apiKey;
 		types.add(Type.PERSON);
 		types.add(Type.AUTHOR);
-		types.add(Type.ORGANIZATION_FOUNDER);
 		types.add(Type.BUSINESSPERSON);
 		types.add(Type.ACTOR);
 		types.add(Type.LEAGUE);
