@@ -1,18 +1,13 @@
 package output;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import result.SearchResult;
 import result.TopicResult;
 import result.Type;
-import service.SearchService;
-import service.TopicService;
 import entities.*;
 
 public class EntityBox extends Output{
@@ -20,6 +15,10 @@ public class EntityBox extends Output{
 	private Set<Type> types;
 	private Set<Type> persontypes = new HashSet<Type>();
 	
+	/**
+	 * instantiate an entitybox
+	 * @param result TopicResult
+	 */
 	public EntityBox(TopicResult result){
 		this.result = result;
 		this.types = result.getTypes();
@@ -28,28 +27,26 @@ public class EntityBox extends Output{
 		persontypes.add(Type.BUSINESSPERSON);
 	}
 	
+	/**
+	 * prints the stuff
+	 */
 	public void print(){
-		System.out.println("FORMATTED STUFF STARTS HERE");
 		if(types.contains(Type.PERSON)){
 			printPerson();
-			if(types.contains(Type.BUSINESSPERSON)){
-				printBusinessPerson();
-			}
-			if(types.contains(Type.AUTHOR)){
-				printAuthor();
-			}
-			if(types.contains(Type.ACTOR)){
-				printActor();
-			}
+			if(types.contains(Type.BUSINESSPERSON)) printBusinessPerson();
+			if(types.contains(Type.AUTHOR)) printAuthor();			
+			if(types.contains(Type.ACTOR)) printActor();	
 		}
-		else if(types.contains(Type.LEAGUE)){
-			printLeague();
-		}
-		else if(types.contains(Type.TEAM)){
-			printTeam();
-		}
+		else if(types.contains(Type.LEAGUE)) printLeague();
+		else if(types.contains(Type.TEAM)) printTeam();
 	}
 	
+	/**
+	 * get what the "person" types are and format a string
+	 * that has the types separated by comma, inside parentheses
+	 * @param p Person
+	 * @return formatted string
+	 */
 	public String persontypes(Person p){
 		persontypes.retainAll(types);
 		String s = persontypes.toString();
@@ -57,12 +54,15 @@ public class EntityBox extends Output{
 		return s;
 	}
 	
+	/**
+	 * print the Person fields
+	 */
 	public void printPerson(){
 		Person p = result.getPerson();
+		
 		String name = p.getName() + " " + persontypes(p);
 		String dateOfBirth = p.getDateOfBirth();
 		String placeOfBirth = p.getPlaceOfBirth();
-		
 		String placeOfDeath = p.getPlaceOfDeath();
 		String dateOfDeath = p.getDateOfDeath();
 		String causeOfDeath = p.getCauseOfDeath();
@@ -71,19 +71,27 @@ public class EntityBox extends Output{
 		String description = p.getDescription();
 		
 		Formatter fmt = new Formatter();
+		
+		// print centered headline
 		fmt.format(newline());
-		fmt.format("|"); 
-	    center("%s", fmt, name, 98); 
-	    fmt.format("|\n");
+		center(fmt, name);
 	    fmt.format(newline());
+	    
+	    // print birthday
 	    leftalign(fmt, "Birthday:", dateOfBirth);
 	    fmt.format(newline());
+	    
+	    // print death stuff
 	    if (dateOfDeath!=null){
 	    	leftalign(fmt, "Death:", dateOfDeath + " at " + placeOfDeath + ", cause: " + causeOfDeath);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print place of birth
 	    leftalign(fmt, "Place of birth:", placeOfBirth);
 	    fmt.format(newline());
+	    
+	    // print siblings
 	    if (siblings != null && siblings.size() > 0) {
 	    	leftalign(fmt, "Sibling(s):", siblings.get(0));
 	    	if (siblings.size() > 1){
@@ -93,6 +101,8 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print spouses
 	    if (spouses != null && spouses.size() > 0) {
 	    	leftalign(fmt, "Spouse(s):", spouses.get(0));
 	    	if (spouses.size() > 1){
@@ -102,20 +112,28 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print description
 	    if (description != null){
 	    	wrap(fmt, "Description", description);
 	    	fmt.format(newline());
 	    }
-	    System.out.print(fmt); 
-		
+	    System.out.print(fmt);
 	}
+	
+	/**
+	 * print businessperson fields
+	 */
 	public void printBusinessPerson(){
 		BusinessPerson b = result.getBusinessPerson();
+		
 		List<Organization> organizations_founded = b.getOrgsFounded();
 		List<Organization> organizations_led = b.getOrgsLed();
 		List<Organization> organizations_onboard = b.getOrgsOnboard();
 	
 		Formatter fmt = new Formatter();
+		
+		// print orgs led
 		if (organizations_led != null && organizations_led.size() > 0) {
 			leftalign(fmt, "Leadership:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_led){
@@ -124,6 +142,8 @@ public class EntityBox extends Output{
 			}
 	    	fmt.format(newline());
 	    }
+		
+		// print orgs onboard
 		if (organizations_onboard != null && organizations_onboard.size() > 0) {
 			leftalign(fmt, "Board member:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_onboard){
@@ -132,6 +152,8 @@ public class EntityBox extends Output{
 			}
 	    	fmt.format(newline());
 	    }
+		
+		// print orgs founded
 		if (organizations_founded != null && organizations_founded.size() > 0) {
 			leftalign(fmt, "Founded:", organizations_founded.get(0).getName());
 	    	if (organizations_founded.size() > 1){
@@ -141,17 +163,23 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
-		
 		System.out.print(fmt); 
-	}	
+	}
+	
+	/**
+	 * print author fields
+	 */
 	public void printAuthor(){
 		Author a = result.getAuthor();
+		
 		List<String> books = a.getBooks();
 		List<String> booksabout = a.getBooksAboutTheAuthor();
 		List<String> influenced = a.getInfluenced();
 		List<String> influencedby = a.getInfluencedBy();
 		
 		Formatter fmt = new Formatter();
+		
+		// print books
 		if (books != null && books.size() > 0) {
 	    	leftalign(fmt, "Books:", books.get(0));
 	    	if (books.size() > 1){
@@ -161,6 +189,8 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+		
+		// print books about
 		if (booksabout != null && booksabout.size() > 0) {
 	    	leftalign(fmt, "Books about:", booksabout.get(0));
 	    	if (booksabout.size() > 1){
@@ -170,6 +200,8 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+		
+		// print influences
 		if (influenced != null && influenced.size() > 0) {
 			leftalign(fmt, "Influenced:", influenced.get(0));
 	    	if (influenced.size() > 1){
@@ -179,6 +211,8 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+		
+		// print influenced by
 		if (influencedby != null && influencedby.size() > 0) {
 			leftalign(fmt, "Influenced by:", influencedby.get(0));
 	    	if (influencedby.size() > 1){
@@ -190,14 +224,21 @@ public class EntityBox extends Output{
 	    }
 		System.out.print(fmt); 
 	}
+	
+	/**
+	 * print actor fields
+	 */
 	public void printActor(){
 		Actor a = result.getActor();
+		
 		List<Film> films = a.getFilmography();
 		
 		Formatter fmt = new Formatter();
+		
+		// print films
 		if (films != null){
 			Collections.sort(films);
-			leftalign(fmt, "Films", "Character", "Film Name");
+			leftalign(fmt, "Films:", "Character", "Film Name");
 			leftalign(fmt, "", snewline());
 			for (Film film : films){
 				leftalign(fmt, "", film.getCharacter(), film.getName());
@@ -205,8 +246,13 @@ public class EntityBox extends Output{
 		}
 		System.out.print(fmt); 
 	}
+	
+	/**
+	 * print league fields
+	 */
 	public void printLeague(){
 		League l = result.getLeague();
+		
 		String name = l.getName();
 		String championship = l.getChampionship();
 		String sport = l.getSport();
@@ -216,31 +262,43 @@ public class EntityBox extends Output{
 		List<Team> teams = l.getTeams();
 		
 		Formatter fmt = new Formatter();
+		
+		// print header
 		fmt.format(newline());
-		fmt.format("|"); 
-	    center("%s", fmt, name, 100); 
-	    fmt.format("|\n");
+		center(fmt, name);
 	    fmt.format(newline());
+	    
+	    // print sport
 	    if (sport != null){
 	    	leftalign(fmt, "Sport:", sport);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print website
 	    if (website != null){
 	    	leftalign(fmt, "Official Website:", website);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print championship
 	    if (championship != null){
 	    	leftalign(fmt, "Championship:", championship);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print slogan
 	    if (slogan != null){
 	    	leftalign(fmt, "Slogan:", slogan);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print description
 	    if (description != null){
 	    	wrap(fmt, "Description", description);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print teams
 	    if (teams != null && teams.size() > 0) {
 	    	leftalign(fmt, "Teams:", teams.get(0).getName());
 	    	if (teams.size() > 1){
@@ -250,11 +308,15 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
-		System.out.println(fmt); 
-	    
+		System.out.println(fmt);  
 	}
+	
+	/**
+	 * print team fields
+	 */
 	public void printTeam(){
 		Team t = result.getTeam();
+		
 		String name = t.getName();
 		String description = t.getDescription();
 		String sport = t.getSport();
@@ -267,21 +329,29 @@ public class EntityBox extends Output{
 		List<Player> players = t.getPlayersRoster();
 		
 		Formatter fmt = new Formatter();
+		
+		// print header
 		fmt.format(newline());
-		fmt.format("|"); 
-	    center("%s", fmt, name, 98); 
-	    fmt.format("|\n");
+	    center(fmt, name); 
 	    fmt.format(newline());
+	    
+	    // print name
 	    leftalign(fmt, "Name:", name);
     	fmt.format(newline());
+    	
+    	// print sport
 	    if (sport != null){
 	    	leftalign(fmt, "Sport:", sport);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print arena
 	    if (arena != null){
 	    	leftalign(fmt, "Arena:", arena);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print championships
 	    if (championships != null && championships.size() > 0) {
 	    	leftalign(fmt, "Championships:", championships.get(0));
 	    	if (championships.size() > 1){
@@ -291,10 +361,14 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print founded
 	    if (founded != null){
 	    	leftalign(fmt, "Founded:", founded);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print leagues
 	    if (leagues != null && leagues.size() > 0) {
 	    	leftalign(fmt, "Leagues:", leagues.get(0).getName());
 	    	if (leagues.size() > 1){
@@ -304,6 +378,8 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print locations
 	    if (locations != null && locations.size() > 0) {
 	    	leftalign(fmt, "Locations:", locations.get(0));
 	    	if (locations.size() > 1){
@@ -313,6 +389,8 @@ public class EntityBox extends Output{
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print coaches
 	    if (coaches != null){
 			//Collections.sort(films);
 	    	leftalign(fmt, "Coaches:", "Name", "Position", "From/To");
@@ -323,6 +401,8 @@ public class EntityBox extends Output{
 			}
 			fmt.format(newline());
 		}
+	    
+	    // print players
 	    if (players != null){
 			//Collections.sort(films);
 	    	leftalign(fmt, "Players:","Name", "Position", "Number", "From/To");
@@ -338,41 +418,55 @@ public class EntityBox extends Output{
 	    	fmt.format(newline());
 	    }
 	    System.out.println(fmt); 
-		
-	}
-	public static String newline(){
-		return " -------------------------------------------------------------------------------------------------- \n";
-	}
-	public static String snewline(){
-		return "-------------------------------------------------------------------------------";
-	}
-	public void center(String fmtStr, Formatter f, Object obj, int width){
-		String str; 
-		Formatter tmp = new Formatter(); 
-		tmp.format(fmtStr, obj); 
-		str = tmp.toString(); 
-		int dif = width - str.length(); 
-		if(dif < 0) { 
-		 f.format(str); 
-		 return; 
-		} 
-		char[] pad = new char[dif/2]; 
-		Arrays.fill(pad, ' ');  
-		f.format(new String(pad)); 
-		 
-		f.format(str); 
-		
-		pad = new char[width-dif/2-str.length()]; 
-		Arrays.fill(pad, ' ');  
-		f.format(new String(pad)); 
 	}
 	
-	public static void leftalign(Formatter f, String label, String value){
+	/**
+	 * just for the big linebreak
+	 * @return long line
+	 */
+	public String newline(){
+		return " -------------------------------------------------------------------------------------------------- \n";
+	}
+	
+	/**
+	 * for the shorter linebreaks
+	 * @return shorter line
+	 */
+	public String snewline(){
+		return "-------------------------------------------------------------------------------";
+	}
+	
+	/**
+	 * center something
+	 * @param f formatter
+	 * @param name the thing you want to center
+	 */
+	public void center(Formatter f, String name){
+		String s = name;
+		int length = s.length();
+		int pad = (98-length)/2;
+		String fmtstr = "|%" + Integer.toString(pad) + "s%" + Integer.toString(length) + "s%" + Integer.toString(pad) + "s|\n";
+		f.format(fmtstr, "", name, "");
+	}
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value 
+	 */
+	public void leftalign(Formatter f, String label, String value){
 		String fmtstr = "| %-17s%-80s|\n"; //97
 		f.format(fmtstr, label, truncate(value, 80));
 	}
 	
-	public static void wrap(Formatter f, String  label, String value){
+	/**
+	 * wrap a long piece of text
+	 * @param f formatter
+	 * @param label category name
+	 * @param value
+	 */
+	public void wrap(Formatter f, String  label, String value){
 		value = value.replace("\n", "");
 		String fmtstr = "| %-17s%-80s|\n";
 		int lines = value.length()/80;
@@ -383,20 +477,52 @@ public class EntityBox extends Output{
 		f.format(fmtstr, "", value.substring(lines * 80, value.length()));
 	}
 	
-	public static void leftalign(Formatter f, String label, String value1, String value2){
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value1
+	 * @param value2
+	 */
+	public void leftalign(Formatter f, String label, String value1, String value2){
 		String fmtstr = "| %-17s| %-38s| %-38s|\n"; //93
 		f.format(fmtstr, label, truncate(value1, 38), truncate(value2, 38));
 	}
-	public static void leftalign(Formatter f, String label, String value1, String value2, String value3){
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value1
+	 * @param value2
+	 * @param value3
+	 */
+	public void leftalign(Formatter f, String label, String value1, String value2, String value3){
 		String fmtstr = "| %-17s| %-25s| %-25s| %-24s|\n"; //91
 		f.format(fmtstr, label, truncate(value1, 25), truncate(value2, 25), truncate(value3, 25));
 	}
-	public static void leftalign(Formatter f, String label, String value1, String value2, String value3, String value4){
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value1
+	 * @param value2
+	 * @param value3
+	 * @param value4
+	 */
+	public void leftalign(Formatter f, String label, String value1, String value2, String value3, String value4){
 		String fmtstr = "| %-17s| %-18s| %-18s| %-18s| %-18s|\n"; //89
 		f.format(fmtstr, label, truncate(value1, 18), truncate(value2, 18), truncate(value3, 18), truncate(value4, 18));
 	}
 	
-	public static String truncate(String s, int maxwidth){
+	/**
+	 * trim string to fit and append ellipses
+	 * @param s String
+	 * @param maxwidth
+	 * @return formatted string
+	 */
+	public String truncate(String s, int maxwidth){
 		if (s == null) return "";
 		if (s.length() < maxwidth){
 			return s;
@@ -404,23 +530,4 @@ public class EntityBox extends Output{
 		String trimmed = s.substring(0, maxwidth-3) + "...";
 		return trimmed;
 	}
-	
-	public static void main(String args[]){
-		Formatter f = new Formatter();
-		f.format(newline());
-		leftalign(f, "Films", "Character", "Film Name");
-		leftalign(f, "", snewline());
-		leftalign(f, "", "Alice", "asdf");
-		leftalign(f, "", "Bob", "asdf");
-		f.format(newline());
-		leftalign(f, "asdf", "asdf", "Film asdf", "asdf", "asdf");
-		leftalign(f, "", snewline());
-		leftalign(f, "", "Alice", "asdf", "asdf", "asdf");
-		leftalign(f, "", "Bob", "asdf", "asdf", "asdf");
-		f.format(newline());
-		wrap(f, "description", "Icelandic magical staves (sigils) are symbols credited with magical effect preserved in various grimoires dating from the 17th century and later. According to the Museum of Icelandic Sorcery and Witchcraft, the effects credited to most of the staves were very relevant to the average Icelanders of the time, who were mostly subsistence farmers and had to deal with harsh climatic conditions.");
-		f.format(newline());
-		System.out.println(f); 
-	}
-	
 }
