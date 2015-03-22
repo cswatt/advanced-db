@@ -114,7 +114,7 @@ public class SearchService extends Service{
 	
 	public static void main(String args[]){
 		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		SearchService service = new SearchService(key, "new york knicks");
+		SearchService service = new SearchService(key, "william shakespeare");
 		service.requestInfo();
 		SearchResult sr = service.getResult();
 		String str = sr.getMid();

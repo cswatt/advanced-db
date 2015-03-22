@@ -1,8 +1,8 @@
 package output;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,40 +13,56 @@ import entities.*;
 public class EntityBox extends Output{
 	private TopicResult result;
 	private Set<Type> types;
+	private Set<Type> persontypes = new HashSet<Type>();
 	
+	/**
+	 * instantiate an entitybox
+	 * @param result TopicResult
+	 */
 	public EntityBox(TopicResult result){
 		this.result = result;
 		this.types = result.getTypes();
+		persontypes.add(Type.ACTOR);
+		persontypes.add(Type.AUTHOR);
+		persontypes.add(Type.BUSINESSPERSON);
 	}
 	
+	/**
+	 * prints the stuff
+	 */
 	public void print(){
-		System.out.println("FORMATTED STUFF STARTS HERE");
 		if(types.contains(Type.PERSON)){
 			printPerson();
-			if(types.contains(Type.BUSINESSPERSON)){
-				printBusinessPerson();
-			}
-			if(types.contains(Type.AUTHOR)){
-				printAuthor();
-			}
-			if(types.contains(Type.ACTOR)){
-				printActor();
-			}
+			if(types.contains(Type.BUSINESSPERSON)) printBusinessPerson();
+			if(types.contains(Type.AUTHOR)) printAuthor();			
+			if(types.contains(Type.ACTOR)) printActor();	
 		}
-		else if(types.contains(Type.LEAGUE)){
-			printLeague();
-		}
-		else if(types.contains(Type.TEAM)){
-			printTeam();
-		}
+		else if(types.contains(Type.LEAGUE)) printLeague();
+		else if(types.contains(Type.TEAM)) printTeam();
 	}
 	
+	/**
+	 * get what the "person" types are and format a string
+	 * that has the types separated by comma, inside parentheses
+	 * @param p Person
+	 * @return formatted string
+	 */
+	public String persontypes(Person p){
+		persontypes.retainAll(types);
+		String s = persontypes.toString();
+		s = "(" + s.substring(1, s.length()-1) + ")";
+		return s;
+	}
+	
+	/**
+	 * print the Person fields
+	 */
 	public void printPerson(){
 		Person p = result.getPerson();
-		String name = p.getName();
+		
+		String name = p.getName() + " " + persontypes(p);
 		String dateOfBirth = p.getDateOfBirth();
 		String placeOfBirth = p.getPlaceOfBirth();
-		
 		String placeOfDeath = p.getPlaceOfDeath();
 		String dateOfDeath = p.getDateOfDeath();
 		String causeOfDeath = p.getCauseOfDeath();
@@ -55,140 +71,188 @@ public class EntityBox extends Output{
 		String description = p.getDescription();
 		
 		Formatter fmt = new Formatter();
-		fmt.format("|"); 
-	    center("%s", fmt, name, 100); 
-	    fmt.format("|\n");
+		
+		// print centered headline
+		fmt.format(newline());
+		center(fmt, name);
 	    fmt.format(newline());
-	    fmt.format("| %-20s %-80s|\n", "Birthday:", dateOfBirth);
+	    
+	    // print birthday
+	    leftalign(fmt, "Birthday:", dateOfBirth);
 	    fmt.format(newline());
+	    
+	    // print death stuff
 	    if (dateOfDeath!=null){
-	    	fmt.format("| %-20s %-80s|\n", "Death:", dateOfDeath + " at " + placeOfDeath + ", cause: " + causeOfDeath);
+	    	leftalign(fmt, "Death:", dateOfDeath + " at " + placeOfDeath + ", cause: " + causeOfDeath);
 	    	fmt.format(newline());
 	    }
-	    fmt.format("| %-20s %-80s|\n", "Place of birth:", placeOfBirth);
+	    
+	    // print place of birth
+	    leftalign(fmt, "Place of birth:", placeOfBirth);
 	    fmt.format(newline());
+	    
+	    // print siblings
 	    if (siblings != null && siblings.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Sibling(s):", siblings.get(0));
+	    	leftalign(fmt, "Sibling(s):", siblings.get(0));
 	    	if (siblings.size() > 1){
 	    		for (String sibling : siblings.subList(1, siblings.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", sibling);
+	    			leftalign(fmt, "", sibling);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print spouses
 	    if (spouses != null && spouses.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Spouse(s):", spouses.get(0));
+	    	leftalign(fmt, "Spouse(s):", spouses.get(0));
 	    	if (spouses.size() > 1){
 	    		for (String spouse : spouses.subList(1, spouses.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", spouse);
+	    			leftalign(fmt, "", spouse);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
-	    // TODO description
-	    System.out.println(fmt); 
-		
+	    
+	    // print description
+	    if (description != null){
+	    	wrap(fmt, "Description", description);
+	    	fmt.format(newline());
+	    }
+	    System.out.print(fmt);
 	}
+	
+	/**
+	 * print businessperson fields
+	 */
 	public void printBusinessPerson(){
 		BusinessPerson b = result.getBusinessPerson();
-		if (b==null){
-			System.out.println("huh.");
-		}
+		
 		List<Organization> organizations_founded = b.getOrgsFounded();
 		List<Organization> organizations_led = b.getOrgsLed();
 		List<Organization> organizations_onboard = b.getOrgsOnboard();
 	
 		Formatter fmt = new Formatter();
+		
+		// print orgs led
 		if (organizations_led != null && organizations_led.size() > 0) {
-			fmt.format("| %-20s|%-20s|%-19s|%-19s|%-19s|\n", "Leadership:", "Organization", "Role", "Title", "From-To");
+			leftalign(fmt, "Leadership:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_led){
-				fmt.format("| %-20s %-80s|\n", "",snewline());
-				fmt.format("| %-20s|%.20s|%.19s|%.19s|%.19s|\n", "", org.getName(), org.getLeaderRole(), org.getLeaderTitle(), org.getLeaderFrom() + " - " + org.getLeaderTo());
+				leftalign(fmt, "", snewline());
+				leftalign(fmt, "", org.getName(), org.getLeaderRole(), org.getLeaderTitle(), org.getLeaderFrom() + " - " + org.getLeaderTo());
 			}
 	    	fmt.format(newline());
 	    }
+		
+		// print orgs onboard
 		if (organizations_onboard != null && organizations_onboard.size() > 0) {
-			fmt.format("| %-20s|%-20s|%-19s|%-19s|%-19s|\n", "Leadership:", "Organization", "Role", "Title", "From-To");
+			leftalign(fmt, "Board member:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_onboard){
-				fmt.format("| %-20s %-80s|\n", "",snewline());
-				fmt.format("| %-20s|%.20s|%.19s|%.19s|%.19s|\n", "", org.getName(), org.getBoardMemberRole(), org.getBoardMemberTitle(), org.getBoardMemberFrom() + " - " + org.getBoardMemberTo());
+				leftalign(fmt, "",snewline());
+				leftalign(fmt, "", org.getName(), org.getBoardMemberRole(), org.getBoardMemberTitle(), org.getBoardMemberFrom() + " - " + org.getBoardMemberTo());
 			}
 	    	fmt.format(newline());
 	    }
+		
+		// print orgs founded
 		if (organizations_founded != null && organizations_founded.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Founded:", organizations_founded.get(0).getName());
+			leftalign(fmt, "Founded:", organizations_founded.get(0).getName());
 	    	if (organizations_founded.size() > 1){
 	    		for (Organization org : organizations_founded.subList(1, organizations_founded.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", org.getName());
+	    			leftalign(fmt, "", org.getName());
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
-		
-		System.out.println(fmt); 
-	}	
+		System.out.print(fmt); 
+	}
+	
+	/**
+	 * print author fields
+	 */
 	public void printAuthor(){
 		Author a = result.getAuthor();
+		
 		List<String> books = a.getBooks();
 		List<String> booksabout = a.getBooksAboutTheAuthor();
 		List<String> influenced = a.getInfluenced();
 		List<String> influencedby = a.getInfluencedBy();
 		
 		Formatter fmt = new Formatter();
+		
+		// print books
 		if (books != null && books.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Books:", books.get(0));
+	    	leftalign(fmt, "Books:", books.get(0));
 	    	if (books.size() > 1){
 	    		for (String book : books.subList(1, books.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", book);
+	    			leftalign(fmt, "", book);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+		
+		// print books about
 		if (booksabout != null && booksabout.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Books about:", booksabout.get(0));
+	    	leftalign(fmt, "Books about:", booksabout.get(0));
 	    	if (booksabout.size() > 1){
 	    		for (String book : booksabout.subList(1, booksabout.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", book);
+	    			leftalign(fmt, "", book);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+		
+		// print influences
 		if (influenced != null && influenced.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Influenced:", influenced.get(0));
+			leftalign(fmt, "Influenced:", influenced.get(0));
 	    	if (influenced.size() > 1){
 	    		for (String person : influenced.subList(1, influenced.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", person);
+	    			leftalign(fmt, "", person);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+		
+		// print influenced by
 		if (influencedby != null && influencedby.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Influenced by:", influencedby.get(0));
+			leftalign(fmt, "Influenced by:", influencedby.get(0));
 	    	if (influencedby.size() > 1){
 	    		for (String person : influencedby.subList(1, influencedby.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", person);
+	    			leftalign(fmt, "", person);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
-		System.out.println(fmt); 
+		System.out.print(fmt); 
 	}
+	
+	/**
+	 * print actor fields
+	 */
 	public void printActor(){
 		Actor a = result.getActor();
+		
 		List<Film> films = a.getFilmography();
 		
 		Formatter fmt = new Formatter();
+		
+		// print films
 		if (films != null){
 			Collections.sort(films);
-			fmt.format("| %-20s %-40s %-40s|\n", "Films","Character", "Film Name");
+			leftalign(fmt, "Films:", "Character", "Film Name");
+			leftalign(fmt, "", snewline());
 			for (Film film : films){
-				fmt.format("| %-20s %-40s %-40s|\n", "",film.getCharacter(), film.getName());
+				leftalign(fmt, "", film.getCharacter(), film.getName());
 			}
 		}
-		System.out.println(fmt); 
+		System.out.print(fmt); 
 	}
+	
+	/**
+	 * print league fields
+	 */
 	public void printLeague(){
 		League l = result.getLeague();
+		
 		String name = l.getName();
 		String championship = l.getChampionship();
 		String sport = l.getSport();
@@ -198,42 +262,61 @@ public class EntityBox extends Output{
 		List<Team> teams = l.getTeams();
 		
 		Formatter fmt = new Formatter();
+		
+		// print header
 		fmt.format(newline());
-		fmt.format("|"); 
-	    center("%s", fmt, name, 100); 
-	    fmt.format("|\n");
+		center(fmt, name);
 	    fmt.format(newline());
+	    
+	    // print sport
 	    if (sport != null){
-	    	fmt.format("| %-20s %-80s|\n", "Sport:", sport);
+	    	leftalign(fmt, "Sport:", sport);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print website
 	    if (website != null){
-	    	fmt.format("| %-20s %-80s|\n", "Official Website:", website);
+	    	leftalign(fmt, "Official Website:", website);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print championship
 	    if (championship != null){
-	    	fmt.format("| %-20s %-80s|\n", "Championship:", championship);
+	    	leftalign(fmt, "Championship:", championship);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print slogan
 	    if (slogan != null){
-	    	fmt.format("| %-20s %-80s|\n", "Slogan:", slogan);
+	    	leftalign(fmt, "Slogan:", slogan);
 	    	fmt.format(newline());
 	    }
-	    // TODO description
+	    
+	    // print description
+	    if (description != null){
+	    	wrap(fmt, "Description", description);
+	    	fmt.format(newline());
+	    }
+	    
+	    // print teams
 	    if (teams != null && teams.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Books:", teams.get(0).getName());
+	    	leftalign(fmt, "Teams:", teams.get(0).getName());
 	    	if (teams.size() > 1){
 	    		for (Team team : teams.subList(1, teams.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", team.getName());
+	    			leftalign(fmt, "", team.getName());
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
-		System.out.println(fmt); 
-	    
+		System.out.println(fmt);  
 	}
+	
+	/**
+	 * print team fields
+	 */
 	public void printTeam(){
 		Team t = result.getTeam();
+		
 		String name = t.getName();
 		String description = t.getDescription();
 		String sport = t.getSport();
@@ -246,107 +329,205 @@ public class EntityBox extends Output{
 		List<Player> players = t.getPlayersRoster();
 		
 		Formatter fmt = new Formatter();
+		
+		// print header
 		fmt.format(newline());
-		fmt.format("|"); 
-	    center("%s", fmt, name, 100); 
-	    fmt.format("|\n");
+	    center(fmt, name); 
 	    fmt.format(newline());
-	    fmt.format("| %-20s %-80s|\n", "Name:", name);
+	    
+	    // print name
+	    leftalign(fmt, "Name:", name);
     	fmt.format(newline());
+    	
+    	// print sport
 	    if (sport != null){
-	    	fmt.format("| %-20s %-80s|\n", "Sport:", sport);
+	    	leftalign(fmt, "Sport:", sport);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print arena
 	    if (arena != null){
-	    	fmt.format("| %-20s %-80s|\n", "Arena:", arena);
+	    	leftalign(fmt, "Arena:", arena);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print championships
 	    if (championships != null && championships.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Championships:", championships.get(0));
+	    	leftalign(fmt, "Championships:", championships.get(0));
 	    	if (championships.size() > 1){
 	    		for (String championship : championships.subList(1, championships.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", championship);
+	    			leftalign(fmt, "", championship);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print founded
 	    if (founded != null){
-	    	fmt.format("| %-20s %-80s|\n", "Founded:", founded);
+	    	leftalign(fmt, "Founded:", founded);
 	    	fmt.format(newline());
 	    }
+	    
+	    // print leagues
 	    if (leagues != null && leagues.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Leagues:", leagues.get(0).getName());
+	    	leftalign(fmt, "Leagues:", leagues.get(0).getName());
 	    	if (leagues.size() > 1){
 	    		for (League league : leagues.subList(1, leagues.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", league.getName());
+	    			leftalign(fmt, "", league.getName());
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print locations
 	    if (locations != null && locations.size() > 0) {
-	    	fmt.format("| %-20s %-80s|\n", "Locations:", locations.get(0));
+	    	leftalign(fmt, "Locations:", locations.get(0));
 	    	if (locations.size() > 1){
 	    		for (String location : locations.subList(1, locations.size())){
-	    			fmt.format("| %-20s %-80s|\n", "", location);
+	    			leftalign(fmt, "Locations:", location);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
+	    
+	    // print coaches
 	    if (coaches != null){
 			//Collections.sort(films);
-			fmt.format("| %-20s |%-25s|%-25s|%-25s|\n", "Coaches","Name", "Position", "From/To");
-			fmt.format("| %-20s %-80s|\n", "",snewline());
+	    	leftalign(fmt, "Coaches:", "Name", "Position", "From/To");
+			leftalign(fmt, "", snewline());
 			for (Coach coach : coaches){
-				String posString = "";
-				for (String p : coach.getPositions()){
-					posString = posString + p + ", ";
-				}
-				fmt.format("| %-20s |%-25s|%-25s|%-25s|\n", "",coach.getName(),posString, coach.getFrom() + " / " + coach.getTo());
+				String posString = listToString(coach.getPositions(), true);
+				leftalign(fmt, "", coach.getName(), posString, coach.getFrom() + " / " + coach.getTo());
 			}
 			fmt.format(newline());
 		}
+	    
+	    // print players
 	    if (players != null){
 			//Collections.sort(films);
-			fmt.format("| %-20s |%-25s|%-25s|%-25s|%-25s|\n", "Players","Name", "Position", "Number", "From/To");
-			fmt.format("| %-20s %-80s|\n", "",snewline());
+	    	leftalign(fmt, "Players:","Name", "Position", "Number", "From/To");
+	    	leftalign(fmt, "", snewline());
 			for (Player player : players){
-				String posString = "";
-				for (String p : player.getPositions()){
-					posString = posString + p + ", ";
-				}
-				fmt.format("| %-20s |%-25s|%-25s|%-25s|%-25s|\n", "",player.getName(),posString, player.getNumber(), player.getFrom() + " / " + player.getTo());
+				String posString = listToString(player.getPositions(), true);
+				leftalign(fmt, "", player.getName(), posString, player.getNumber(), player.getFrom() + " / " + player.getTo());
 			}
 			fmt.format(newline());
 		}
-	    //TODO description
+	    if (description != null){
+	    	wrap(fmt, "Description", description);
+	    	fmt.format(newline());
+	    }
 	    System.out.println(fmt); 
-		
 	}
+	
+	/**
+	 * just for the big linebreak
+	 * @return long line
+	 */
 	public String newline(){
 		return " -------------------------------------------------------------------------------------------------- \n";
 	}
+	
+	/**
+	 * for the shorter linebreaks
+	 * @return shorter line
+	 */
 	public String snewline(){
-		return "----------------------------------------------------------------------------------";
-	}
-	public void center(String fmtStr, Formatter f, Object obj, int width){
-		String str; 
-		Formatter tmp = new Formatter(); 
-		tmp.format(fmtStr, obj); 
-		str = tmp.toString(); 
-		int dif = width - str.length(); 
-		if(dif < 0) { 
-		 f.format(str); 
-		 return; 
-		} 
-		char[] pad = new char[dif/2]; 
-		Arrays.fill(pad, ' ');  
-		f.format(new String(pad)); 
-		 
-		f.format(str); 
-		
-		pad = new char[width-dif/2-str.length()]; 
-		Arrays.fill(pad, ' ');  
-		f.format(new String(pad)); 
+		return "-------------------------------------------------------------------------------";
 	}
 	
+	/**
+	 * center something
+	 * @param f formatter
+	 * @param name the thing you want to center
+	 */
+	public void center(Formatter f, String name){
+		String s = name;
+		int length = s.length();
+		int pad = (98-length)/2;
+		String fmtstr = "|%" + Integer.toString(pad) + "s%" + Integer.toString(length) + "s%" + Integer.toString(pad) + "s|\n";
+		f.format(fmtstr, "", name, "");
+	}
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value 
+	 */
+	public void leftalign(Formatter f, String label, String value){
+		String fmtstr = "| %-17s%-80s|\n"; //97
+		f.format(fmtstr, label, truncate(value, 80));
+	}
+	
+	/**
+	 * wrap a long piece of text
+	 * @param f formatter
+	 * @param label category name
+	 * @param value
+	 */
+	public void wrap(Formatter f, String  label, String value){
+		value = value.replace("\n", "");
+		String fmtstr = "| %-17s%-80s|\n";
+		int lines = value.length()/80;
+		f.format(fmtstr, label, value.substring(0, 80));
+		for (int i = 1; i < lines ; i++){
+			f.format(fmtstr, "", value.substring(i * 80, i * 80 + 80));
+		}
+		f.format(fmtstr, "", value.substring(lines * 80, value.length()));
+	}
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value1
+	 * @param value2
+	 */
+	public void leftalign(Formatter f, String label, String value1, String value2){
+		String fmtstr = "| %-17s| %-38s| %-38s|\n"; //93
+		f.format(fmtstr, label, truncate(value1, 38), truncate(value2, 38));
+	}
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value1
+	 * @param value2
+	 * @param value3
+	 */
+	public void leftalign(Formatter f, String label, String value1, String value2, String value3){
+		String fmtstr = "| %-17s| %-25s| %-25s| %-24s|\n"; //91
+		f.format(fmtstr, label, truncate(value1, 25), truncate(value2, 25), truncate(value3, 25));
+	}
+	
+	/**
+	 * left align fields
+	 * @param f formatter
+	 * @param label category name
+	 * @param value1
+	 * @param value2
+	 * @param value3
+	 * @param value4
+	 */
+	public void leftalign(Formatter f, String label, String value1, String value2, String value3, String value4){
+		String fmtstr = "| %-17s| %-18s| %-18s| %-18s| %-18s|\n"; //89
+		f.format(fmtstr, label, truncate(value1, 18), truncate(value2, 18), truncate(value3, 18), truncate(value4, 18));
+	}
+	
+	/**
+	 * trim string to fit and append ellipses
+	 * @param s String
+	 * @param maxwidth
+	 * @return formatted string
+	 */
+	public String truncate(String s, int maxwidth){
+		if (s == null) return "";
+		if (s.length() < maxwidth){
+			return s;
+		}
+		String trimmed = s.substring(0, maxwidth-3) + "...";
+		return trimmed;
+	}
 }
