@@ -1,7 +1,5 @@
 package result;
 
-import entities.Film;
-
 public class Role implements Comparable<Role> {
 	private String name;
 	private String job;
