@@ -81,18 +81,25 @@ public class EntityBox extends Output{
 	    fmt.format(newline());
 	    
 	    // print birthday
-	    leftalign(fmt, "Birthday:", dateOfBirth);
-	    fmt.format(newline());
+	    if(dateOfBirth!=null){
+	    	leftalign(fmt, "Birthday:", dateOfBirth);
+	    	fmt.format(newline());
+	    }
 	    
 	    // print death stuff
 	    if (dateOfDeath!=null){
-	    	leftalign(fmt, "Death:", dateOfDeath + " at " + placeOfDeath + ", cause: " + causeOfDeath);
+	    	String deathinfo = dateOfDeath;
+	    	if (placeOfDeath != null) deathinfo = deathinfo + " at " + placeOfDeath;
+	    	if (causeOfDeath != null) deathinfo = deathinfo + ", cause: " + causeOfDeath;
+	    	leftalign(fmt, "Death:", deathinfo);
 	    	fmt.format(newline());
 	    }
 	    
 	    // print place of birth
-	    leftalign(fmt, "Place of birth:", placeOfBirth);
-	    fmt.format(newline());
+	    if (placeOfBirth!=null){
+	    	leftalign(fmt, "Place of birth:", placeOfBirth);
+	    	fmt.format(newline());
+	    }
 	    
 	    // print siblings
 	    if (siblings != null && siblings.size() > 0) {
@@ -105,12 +112,19 @@ public class EntityBox extends Output{
 	    	fmt.format(newline());
 	    }
 	    
-	    // print spouses -- extra fields need to be added 
+	    // print spouses
 	    if (spouses != null && spouses.size() > 0) {
 	    	leftalign(fmt, "Spouse(s):", spouses.get(0).getName());
 	    	if (spouses.size() > 1){
 	    		for (Spouse spouse : spouses.subList(1, spouses.size())){
-	    			leftalign(fmt, "", spouse.getName());
+	    			String spouseinfo = spouse.getName();
+	    			if ((spouse.getFrom()!= null) || (spouse.getTo() != null)){
+	    				if (spouse.getFrom() == null) spouseinfo = spouseinfo + " ( - " + spouse.getTo()+")";
+	    				if (spouse.getTo() == null) spouseinfo = spouseinfo + " (" + spouse.getFrom() + ")";
+	    				if ((spouse.getFrom() != null) && (spouse.getTo() != null)) spouseinfo = spouseinfo + " (" + spouse.getFrom() + " - " + spouse.getTo() + ")";
+	    			}
+	    			if (spouse.getMarriageLocation() != null) spouseinfo = spouseinfo + " @ " + spouse.getMarriageLocation();
+	    			leftalign(fmt, "", spouseinfo);
 	    		}
 	    	}
 	    	fmt.format(newline());
@@ -490,6 +504,8 @@ public class EntityBox extends Output{
 	 */
 	public void leftalign(Formatter f, String label, String value1, String value2){
 		String fmtstr = "| %-17s| %-38s| %-38s|\n"; //93
+		if (value1 == null) value1 = "";
+		if (value2 == null) value2 = "";
 		f.format(fmtstr, label, truncate(value1, 38), truncate(value2, 38));
 	}
 	
@@ -503,6 +519,9 @@ public class EntityBox extends Output{
 	 */
 	public void leftalign(Formatter f, String label, String value1, String value2, String value3){
 		String fmtstr = "| %-17s| %-25s| %-25s| %-24s|\n"; //91
+		if (value1 == null) value1 = "";
+		if (value2 == null) value2 = "";
+		if (value3 == null) value3 = "";
 		f.format(fmtstr, label, truncate(value1, 25), truncate(value2, 25), truncate(value3, 25));
 	}
 	
@@ -517,6 +536,10 @@ public class EntityBox extends Output{
 	 */
 	public void leftalign(Formatter f, String label, String value1, String value2, String value3, String value4){
 		String fmtstr = "| %-17s| %-18s| %-18s| %-18s| %-18s|\n"; //89
+		if (value1 == null) value1 = "";
+		if (value2 == null) value2 = "";
+		if (value3 == null) value3 = "";
+		if (value4 == null) value4 = "";
 		f.format(fmtstr, label, truncate(value1, 18), truncate(value2, 18), truncate(value3, 18), truncate(value4, 18));
 	}
 	
