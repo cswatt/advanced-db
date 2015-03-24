@@ -12,7 +12,10 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-
+/**
+ * Makes request to the Freebase Topic API
+ * creates a TopicResult object
+ */
 public class TopicService extends Service{
 
 	private String topicId;
@@ -21,11 +24,19 @@ public class TopicService extends Service{
 	
 	private TopicResult result;
 	
+	/**
+	 * Creates an instance of TopicService
+	 * @param apiKey
+	 * @param topicId
+	 */
 	public TopicService(String apiKey, String topicId){
 		this.topicId = topicId;
 		this.apiKey = apiKey;
 	}
 	
+	/**
+	 * Makes request to Freebase Topic API
+	 */
 	public void requestInfo(){
 		try {
 		      this.httpTransport = new NetHttpTransport();
@@ -47,30 +58,12 @@ public class TopicService extends Service{
 		      ex.printStackTrace();
 		    }
 	}
+	
+	/**
+	 * Returns the TopicResult
+	 * @return
+	 */
 	public TopicResult getResult(){
 		return this.result;
 	}
-	//temporary for testing purposes
-	public static void main(String[] args) {
-		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		
-		TopicService service = new TopicService(key,"/m/081k8");
-		service.requestInfo();
-		
-	      
-	      if(service.getResult().getPerson() != null)
-	    	  service.getResult().getPerson().print();
-	      if(service.getResult().getBusinessPerson() != null)
-	    	  service.getResult().getBusinessPerson().print();
-	      if(service.getResult().getAuthor() != null)
-	    	  service.getResult().getAuthor().print();
-	      if(service.getResult().getActor() != null)
-	    	  service.getResult().getActor().print();
-	      if(service.getResult().getLeague() != null)
-	    	  service.getResult().getLeague().print();
-	      if(service.getResult().getTeam() != null)
-	    	  service.getResult().getTeam().print();
-	      
-	}
-
 }
