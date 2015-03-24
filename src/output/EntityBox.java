@@ -9,7 +9,10 @@ import java.util.Set;
 import result.TopicResult;
 import result.Type;
 import entities.*;
-
+/**
+ * Given a TopicResult object,
+ * prints out the formatted information
+ */
 public class EntityBox extends Output{
 	private TopicResult result;
 	private Set<Type> types;
@@ -236,13 +239,14 @@ public class EntityBox extends Output{
 		Formatter fmt = new Formatter();
 		
 		// print films
-		if (films != null){
+		if (films != null && films.size() > 0){
 			Collections.sort(films);
 			leftalign(fmt, "Films:", "Character", "Film Name");
 			leftalign(fmt, "", snewline());
 			for (Film film : films){
 				leftalign(fmt, "", film.getCharacter(), film.getName());
 			}
+			fmt.format(newline());
 		}
 		System.out.print(fmt); 
 	}
