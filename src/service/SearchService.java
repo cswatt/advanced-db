@@ -24,13 +24,21 @@ import org.json.simple.parser.ParseException;
 
 import output.EntityBox;
 
+/**
+ * Makes a request to the Search API
+ * and creates a SearchResult object
+ */
 public class SearchService extends Service{
 	private String query;
 	private String apiKey;
 	private SearchResult result;
 	private Set<Type> types = new HashSet<Type>();
-	//private HashSet<String> types = new HashSet<String>();
 	
+	/**
+	 * create an instance of SearchService
+	 * @param apiKey
+	 * @param query
+	 */
 	public SearchService(String apiKey, String query){
 		this.query = query;
 		this.apiKey = apiKey;
@@ -42,9 +50,20 @@ public class SearchService extends Service{
 		types.add(Type.TEAM);
 	}
 	
+	/**
+	 * Makes requests to Search API, creates TopicService objects
+	 * for each MID retrieved, and looks at the resulting TopicResult
+	 * objects to see if they match any of the entities we are looking for.
+	 * This is done by taking the intersection of getTypes and the types set
+	 * populated when this object was instantiated.
+	 * 
+	 * Fetches 20 of these results, then evaluates each of them.
+	 * After each group of 5 results is evaluated, a status message is printed.
+	 * 
+	 * When a suitable result is found, a SearchResult object is created.
+	 */
 	public void requestInfo(){
 		String mid = "";
-		
 		JSONObject found_result = null;
 		
 		try {
@@ -64,19 +83,19 @@ public class SearchService extends Service{
 				}
 				n++;
 				if (n==6){
-					System.out.println("searching next");
+					System.out.println("5 results searched. Now looking at 10 results.");
 					continue;
 				}
 				if (n==11){
-					System.out.println("searching next");
+					System.out.println("10 results searched. Now looking at 15 results.");
 					continue;
 				}
 				if (n==16){
-					System.out.println("searching next");
+					System.out.println("15 results searched. Now looking at 20 results.");
 					continue;
 				}
 				if (n==21){
-					System.out.println("giving up");
+					System.out.println("20 results searched, nothing found. Giving up.");
 				}
 			}
 		} catch (Exception ex) {
@@ -86,6 +105,15 @@ public class SearchService extends Service{
 		setResult(r);
 	}
 	
+	/**
+	 * Makes a request to the Freebase Search API
+	 * @param apiKey
+	 * @param query   query
+	 * @param limit   how many results to return
+	 * @return        JSONArray of results
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public JSONArray search(String apiKey, String query, int limit) throws IOException, ParseException{
 		JSONArray results = null;
 		this.httpTransport = new NetHttpTransport();
@@ -103,25 +131,19 @@ public class SearchService extends Service{
 		return results;
 	}
 	
+	/**
+	 * set the SearchResult
+	 * @param result
+	 */
 	public void setResult(SearchResult result){
 		this.result = result;
 	}
 	
+	/**
+	 * retrieve the SearchResult
+	 * @return
+	 */
 	public SearchResult getResult(){
 		return result;
-	}
-	
-	public static void main(String args[]){
-		String key = "AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho";
-		SearchService service = new SearchService(key, "william shakespeare");
-		service.requestInfo();
-		SearchResult sr = service.getResult();
-		String str = sr.getMid();
-		
-		TopicService t = new TopicService(key, str);
-		t.requestInfo();
-		TopicResult tr = t.getResult();
-		EntityBox e = new EntityBox(tr);
-		e.print();
 	}
 }
