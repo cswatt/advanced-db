@@ -1,0 +1,90 @@
+==================================
+Aikaterini Iliakopoulou (ai2315)
+Cecilia Watt (ciw2104)
+COMS E6111 Project #2
+DUE 
+==================================
+[001] List of Files
+[002] How to Run
+[003] High-Level Description
+[004] Freebase API Key
+
+==================================
+[001] LIST OF FILES
+==================================
+Retriever.java
+[creator package]
+	Creator.java
+	EntityBoxCreator.java
+	QueryBoxCreator.java
+[entities package]
+	Actor.java
+	Author.java
+	BusinessPerson.java
+	Coach.java
+	Film.java
+	League.java
+	Organization.java
+	Person.java
+	Player.java
+	Spouse.java
+	Team.java
+[output package]
+	Output.java
+	EntityBox.java
+	QueryBox.java
+[result package]
+	JSONable.java
+	MQLResult.java
+	Result.java
+	Role.java
+	SearchResult.java
+	TopicResult.java
+	Type.java
+	Value.java
+	Values.java
+[service package]
+	Service.java
+	SearchService.java
+	TopicService.java
+	MQLService.java
+==================================
+[002] HOW TO COMPILE & RUN
+==================================
+COMPILE:
+
+RUN:
+
+==================================
+[003] HIGH LEVEL DESCRIPTION
+==================================
+The main method in Retriever prompts the user for input.
+
+[determining whether to call EntityBoxCreator or QueryBoxCreator]
+
+a. If the user enters an infobox query, an EntityBoxCreator object will be instantiated. EntityBoxCreator creates a SearchService object using the provided API key and the query. The requestInfo() method in SearchService is then called.
+
+This will retrieve a maximum of 20 results, from which TopicService and TopicResult objects will be created in order to see what types of entities this particular mId matches to. Each SearchService object has a set of the entities this program is looking for. It simply takes the intersection of this set and the entities retrieved by TopicResult.getTypes(). If the intersection is empty for all 20 results, an error message is printed and the program exits. 
+
+The first search result for which the intersection is not empty is chosen, and a SearchResult object is created. SearchResult simply represents what was retrieved in that search, primarily the entity's name and mId. 
+
+EntityBoxCreator fetches the mId and creates a TopicService object using the API key and the mId. The requestInfo() method in TopicService is then called.
+
+[creating TopicResult, mapping]
+
+Finally, EntityBoxCreator creates an EntityBox object with TopicResult as a parameter, and calls print(). EntityBox looks at the types of entities the TopicResult contains, and prints out a formatted view of desired information to the console.
+
+b. If the user enters a question in the form "Who created X?" a QueryBoxCreator object will be instantiated. QueryBoxCreator creates an MQLService object using the provided API key and the processed query (the X from the question). The requestInfo() method in MQLService is called.
+
+MQLService will then make two requests to the API: first, it assumes that X is a book title and will search for authors who wrote books with X in the title; next, it assumes that X is an organization name and will search for businesspeople who founded organizations with X in the name. MQLService then creates an MQLResult object, passing in the two JSONArray responses as parameters.
+
+MQLResult parses the two JSONArrays. For each object in each array, the name of the person and the name of the creation are extracted. A Role object is created, which holds the person's name and the job through which they created their creation. A Map is populated with each pairing of role and creation.
+
+QueryBoxCreator creates a QueryBox object with MQLResult as a parameter.
+
+QueryBox gets the mql_map fromo MQLResult.getMQLMap(), and puts the keys into a List which is then sorted in alphabetical order by the person's first name. The items from this list and their associated values in the map are then printed to console. 
+
+==================================
+[005] FREEBASE API KEY
+==================================
+AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho
