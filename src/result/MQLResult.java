@@ -15,18 +15,31 @@ import java.util.Set;
 
 import com.jayway.jsonpath.JsonPath;
 
-
+/**
+ * Represents the results of an MQL search.
+ */
 public class MQLResult extends Result{
 	private Map<Role, List<String>> mql_map = new HashMap<Role, List<String>>();
 	private JSONArray book_results;
 	private JSONArray organization_results;
 	
+	/**
+	 * Creates an MQLResult object and calls parse()
+	 * @param book_results
+	 * @param organization_results
+	 */
 	public MQLResult(JSONArray book_results, JSONArray organization_results){
 		this.book_results = book_results;
 		this.organization_results = organization_results;
 		parse();
 	}
 	
+	/**
+	 * Sorts through the two JSONArrays. Extracts the person's name and
+	 * creates a Role object with their name and job (author or businessperson)
+	 * 
+	 * Consolidates all these matchings of Role and the thing they created into mql_map
+	 */
 	private void parse(){
 		for (Object res : book_results){
 			String author = JsonPath.read(res,"$.name").toString();
@@ -58,6 +71,10 @@ public class MQLResult extends Result{
 	public void setMQLMap(Map m){
 		this.mql_map = m;
 	}
+	/**
+	 * return the map MQLMap
+	 * @return
+	 */
 	public Map getMQLMap(){
 		return this.mql_map;
 	}
