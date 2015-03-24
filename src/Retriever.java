@@ -61,7 +61,8 @@ public class Retriever {
 			if(qtokens[0].toLowerCase().equals("who") && qtokens[1].toLowerCase().equals("created")){
 				query = query.replace(qtokens[0], "");
 				query = query.replace(qtokens[1], "");
-				query = query.replace("?", "");
+				if(query.contains("?"))
+					query = query.replaceAll("?", "");
 			
 				QueryBoxCreator qcreator = new QueryBoxCreator(apiKey,query);
 				
