@@ -9,7 +9,9 @@ import java.util.Set;
 
 import result.MQLResult;
 import result.Role;
-
+/**
+ * Given an MQLResult object, prints a list of formatted results
+ */
 public class QueryBox extends Output{
 	private MQLResult result;
 	private Map<Role, List<String>> mql_map;
