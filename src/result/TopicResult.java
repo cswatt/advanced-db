@@ -276,9 +276,11 @@ public class TopicResult extends Result{
 					String org_from = null;
 					String org_to = null;
 					
-					//no check because there has to be a name!
-					org_name = JsonPath.read(org.getProperty(),"$./organization/organization_board_membership/organization.values[0].text").toString();
-					
+					if(org.getProperty().toString().contains("\\/organization\\/organization_board_membership\\/organization")){
+						org_name = JsonPath.read(org.getProperty(),"$./organization/organization_board_membership/organization.values[0].text").toString();
+					}
+					if(org_name == null)
+						continue;
 					if(org.getProperty().toString().contains("\\/organization\\/organization_board_membership\\/title"))
 						if(JsonPath.read(org.getProperty(),"$./organization/organization_board_membership/title").toString().contains("valuetype"))
 							org_title = JsonPath.read(org.getProperty(),"$./organization/organization_board_membership/title.values[0].text").toString();
