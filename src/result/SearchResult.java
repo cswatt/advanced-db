@@ -1,16 +1,17 @@
 package result;
-import org.json.simple.JSONArray;
+
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.jayway.jsonpath.JsonPath;
 /**
- * Represents a result from the SearchService
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * 
+ * Class SearchResult represents a result from the SearchService
  * Makes mid, id, name, and notable_id accessible,
  * though largely only mid is used.
  */
-public class SearchResult extends Result{
+public class SearchResult{
 	
 	private String mid;
 	private String id;

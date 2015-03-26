@@ -1,24 +1,22 @@
 package result;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import output.QueryBox;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import com.jayway.jsonpath.JsonPath;
 
+
 /**
- * Represents the results of an MQL search.
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * 
+ * Class MQLResult represents the results of an MQL search.
  */
-public class MQLResult extends Result{
+
+public class MQLResult{
 	private Map<Role, List<String>> mql_map = new HashMap<Role, List<String>>();
 	private JSONArray book_results;
 	private JSONArray organization_results;

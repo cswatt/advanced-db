@@ -9,7 +9,13 @@ import java.util.Set;
 import result.TopicResult;
 import result.Type;
 import entities.*;
+
+
 /**
+ * 
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * 
  * Given a TopicResult object,
  * prints out the formatted information
  */
@@ -31,7 +37,7 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * prints the stuff
+	 * Prints relevant information depending on the type
 	 */
 	public void print(){
 		if(types.contains(Type.PERSON)){

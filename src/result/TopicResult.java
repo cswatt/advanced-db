@@ -23,7 +23,18 @@ import entities.Player;
 import entities.Spouse;
 import entities.Team;
 
-public class TopicResult extends Result{
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class TopicResult represents a result from the TopicService
+ * First it detects the type of the entity that corresponds to the topic
+ * it searches and then based on that type continues the mapping of values
+ * and creates the appropriate objects of the entities specified in the entity package.
+ * The different types are specified by the enum object Type.
+ */
+
+public class TopicResult{
 	static Gson gson = new GsonBuilder()
     .excludeFieldsWithoutExposeAnnotation()
     .create();
@@ -43,6 +54,11 @@ public class TopicResult extends Result{
 		this.topic = topic;
 	}
 	
+	/**
+	 * Looks for the different types the information in the 
+	 * retrieved json topic corresponds to. When a specific type is found
+	 * it's added to the list of types as an enum value.
+	 */
 	public void parseTopic(){
 		//find types first
 		String res = JsonPath.read(topic,"$.property['/type/object/type']").toString();
@@ -85,6 +101,12 @@ public class TopicResult extends Result{
 		processTypes();
 	}
 	
+	/**
+	 * The method calls the appropriate mapping methods based on the types found
+	 * in the retrieved json topic. Because an entity has to be both a person 
+	 * and an actor/businessperson/author, their respective methods are called on the
+	 * condition that type PERSON exists in the list of types.
+	 */
 	private void processTypes(){
 		if(types.contains(Type.PERSON)){
 			processPersonType();
@@ -106,8 +128,21 @@ public class TopicResult extends Result{
 		}
 	}
 	
+	/**
+	 * Maps the information about a person in the retrieved json topic to
+	 * the Person Object. Performs the necessary checks to make sure that 
+	 * the requested information exists in the document and if it doesn't places
+	 * null values in the respective fields. In case, crucial information is omitted 
+	 * in the retrieved json document, such as the person's name then the object is not created
+	 * and the values in the document are not mapped. 
+	 */
 	private void processPersonType(){
-		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		String name = null;
+		if(topic.toString().contains("\\/type\\/object\\/name"))
+			name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		
+		if(name == null)
+			return;
 		
 		String dateOfBirth = null;
 		String placeOfBirth = null;
@@ -189,7 +224,18 @@ public class TopicResult extends Result{
 		person.setDescription(description);
 	}
 	
+	/**
+	 * Maps the information about a business person in the retrieved json topic to
+	 * the BusinessPerson Object. Performs the necessary checks to make sure that 
+	 * the requested information exists in the document and if it doesn't places
+	 * null values in the respective fields. The business person fields are focused on
+	 * the organizations linked with that specific person. Therefore, a list of Organization
+	 * objects is created and the different organizations the person is associated with are parsed. 
+	 * In case the person is associated with an organization in more that one ways (is the founder and the leader),
+	 * then the existing object of the organization is updated with the new information of the association.
+	 */
 	private void processBusinessPersonType(){
+		//that should never happen - but check anyway
 		if(person == null)
 			return;
 		
@@ -320,10 +366,16 @@ public class TopicResult extends Result{
 				}
 			}
 		}
-		
+
 		businessPerson.setOrganizations(organizations);
 	}
 	
+	/**
+	 * Maps the information about an author in the retrieved json topic to
+	 * the Author Object. Performs the necessary checks to make sure that 
+	 * the requested information exists in the document and if it doesn't places
+	 * null values in the respective fields. 
+	 */
 	private void processAuthorType(){
 		if(person == null)
 			return;
@@ -384,6 +436,12 @@ public class TopicResult extends Result{
 		}
 	}
 	
+	/**
+	 * Maps the information about an actor in the retrieved json topic to
+	 * the Actor Object. Performs the necessary checks to make sure that 
+	 * the requested information exists in the document and if it doesn't places
+	 * null values in the respective fields. 
+	 */
 	private void processActorType(){
 		if(person == null)
 			return;
@@ -443,9 +501,21 @@ public class TopicResult extends Result{
 		}
 	}
 	
+	/**
+	 * Maps the information about a league in the retrieved json topic to
+	 * the League Object. Performs the necessary checks to make sure that 
+	 * the requested information exists in the document and if it doesn't places
+	 * null values in the respective fields. In case, crucial information is omitted 
+	 * in the retrieved json document, such as the league's name then the object is not created
+	 * and the values in the document are not mapped. 
+	 */
 	private void processLeagueType(){
-		//no check because there has to be a name
-		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		String name = null;
+		if(topic.toString().contains("\\/type\\/object\\/name"))
+			name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		
+		if(name == null)
+			return;
 		
 		String sport = null;
 		String championship = null;
@@ -500,9 +570,22 @@ public class TopicResult extends Result{
 		
 	}
 	
+	/**
+	 * Maps the information about a team in the retrieved json topic to
+	 * the League Object. Performs the necessary checks to make sure that 
+	 * the requested information exists in the document and if it doesn't places
+	 * null values in the respective fields. In case, crucial information is omitted 
+	 * in the retrieved json document, such as the team's name then the object is not created
+	 * and the values in the document are not mapped. 
+	 */
+	
 	private void processTeamType(){
-		//no check because there has to be a name 
-		String name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		String name = null;
+		if(topic.toString().contains("\\/type\\/object\\/name"))
+			name = JsonPath.read(topic,"$.property['/type/object/name'].values[0].text").toString();
+		
+		if(name == null)
+			return;
 		
 		String sport = null;
 		String description = null;
@@ -672,6 +755,13 @@ public class TopicResult extends Result{
 		this.team.setPlayersRoster(players);
 	}
 	
+	/**
+	 * Method checks whether an organization's name appears in a list of Organization objects.
+	 * If yes then it returns the respective organization instance, otherwise returns null.
+	 * @param organizations
+	 * @param org_name
+	 * @return
+	 */
 	private Organization existsInOrganizations(List<Organization> organizations, String org_name){
 		if(organizations == null || organizations.isEmpty())
 			return null;
@@ -683,6 +773,11 @@ public class TopicResult extends Result{
 		
 		return null;
 	}
+	
+	/**
+	 * Get & Set methods for fields: Types, Person, BusinessPerson,Actor, Author, League, Team
+	 * @return
+	 */
 	
 	public Set<Type> getTypes(){
 		return this.types;

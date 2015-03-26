@@ -2,6 +2,13 @@ package entities;
 
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Coach maps the necessary fields of a person who is an coach of a team. 
+ */
+
 public class Coach {
 	
 	private String name;
@@ -18,6 +25,11 @@ public class Coach {
 		this.name = name;
 		this.positions = positions;
 	}
+	
+	/**
+	 * Get & Set methods for name, coach' positions, from date, to date
+	 * @return
+	 */
 	
 	public String getName(){
 		return this.name;

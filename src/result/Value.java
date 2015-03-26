@@ -7,6 +7,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Value implements the JSONable interface and
+ * is responsible for the mapping of the value fieldtypes inside
+ * the retrieved json document. The contained fields that are mapped are text,
+ * id, timestamp, value and property. Property is a JSONObject
+ * that usually contains more instances of values.
+ */
+
 public class Value implements JSONable{
 	
 	private static final long serialVersionUID = -7934442049449016087L;
@@ -32,6 +44,10 @@ public class Value implements JSONable{
 		
 	}
 	
+	/**
+	 * Get & Set methods for the values of text, id, timestamp, value, property.
+	 * @return
+	 */
 	public String getText(){
 		return this.text;
 	}
@@ -72,6 +88,12 @@ public class Value implements JSONable{
 		this.property = property;
 	}
 	
+	
+	/**
+	 * Method that maps the values in the json document to the class fields
+	 * based on their respective annotation 
+	 * 
+	 */
 	@Override
     public String toJSONString() {
         Gson gson = new GsonBuilder()

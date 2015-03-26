@@ -2,6 +2,13 @@ package entities;
 
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Player maps the necessary fields of a player in a team. 
+ */
+
 public class Player {
 	
 	private String name;
@@ -19,6 +26,12 @@ public class Player {
 		this.name = name;
 		this.positions = positions;
 	}
+	
+	/**
+	 * Get & Set methods for fields name, player's number, from date, to date
+	 * player's position within the team
+	 * @return
+	 */
 	
 	public String getName(){
 		return this.name;

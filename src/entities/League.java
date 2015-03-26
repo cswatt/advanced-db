@@ -2,6 +2,13 @@ package entities;
 
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class League maps the necessary fields of league. 
+ */
+
 public class League {
 	
 	private String name;
@@ -23,6 +30,11 @@ public class League {
 		this.championship = championship;
 	}
 	
+	/**
+	 * Get & Set methods for fields name, championships, sport, slogan, website, description
+	 * list of teams that participate in the league
+	 * @return
+	 */
 	public String getName(){
 		return this.name;
 	}
@@ -79,6 +91,9 @@ public class League {
 		this.teams = teams;
 	}
 	
+	/**
+	 * print information about the league
+	 */
 	public void print(){
 		System.out.println("---------------LEAGUE---------------");
 		

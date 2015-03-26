@@ -2,6 +2,13 @@ package entities;
 
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Author maps the necessary fields of a person who is an author. 
+ */
+
 public class Author extends Person{
 
 	private List<String> books;
@@ -13,6 +20,11 @@ public class Author extends Person{
 		super(name,dateOfBirth,placeOfBirth);
 	}
 	
+	/**
+	 * Get & Set methods for fields books, people the author influenced, 
+	 * people the author was influenced by, books about the author
+	 * @return
+	 */
 	public List<String> getBooks(){
 		return this.books;
 	}
@@ -45,6 +57,10 @@ public class Author extends Person{
 		this.booksAboutTheAuthor = booksAboutTheAuthor;
 	}
 	
+	/**
+	 * Prints information about the author
+	 * @return
+	 */
 	public void print(){
 		System.out.println();
 		if(books != null && books.size() > 0){

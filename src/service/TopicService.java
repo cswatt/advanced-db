@@ -1,26 +1,24 @@
 package service;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import result.TopicResult;
-import result.Type;
 
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+
 /**
- * Makes request to the Freebase Topic API
- * creates a TopicResult object
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Makes request to the Freebase Topic API given a specific topic
+ * and creates a TopicResult object by parsing the retrieved json document.
  */
+
 public class TopicService extends Service{
 
 	private String topicId;
 	private String apiKey;
-	private String filter;
 	
 	private TopicResult result;
 	

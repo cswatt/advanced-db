@@ -2,6 +2,13 @@ package entities;
 
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Team maps the necessary fields of a team. 
+ */
+
 public class Team {
 
 	private String name;
@@ -22,6 +29,12 @@ public class Team {
 		this.sport = sport;
 	}
 	
+	/**
+	 * Get & Set methods for fields name, team's description, sport, team's arena, place where
+	 * team was founded in, team's championships, team's locations, team's coaches, team's leagues,
+	 * team's playersRoster
+	 * @return
+	 */
 	public String getName(){
 		return this.name;
 	}
@@ -102,6 +115,9 @@ public class Team {
 		this.playersRoster = playersRoster;
 	}
 	
+	/**
+	 * Prints information about the team
+	 */
 	public void print(){
 		System.out.println("---------------TEAM---------------");
 		

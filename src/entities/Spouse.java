@@ -1,5 +1,12 @@
 package entities;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Spouse maps the necessary fields of a person's spouse. 
+ */
+
 public class Spouse {
 
 	private String name;
@@ -10,6 +17,11 @@ public class Spouse {
 	public Spouse(String name){
 		this.name = name;
 	}
+	
+	/**
+	 * Get & Set methods for fields name, from date, to date, place where they got married
+	 * @return
+	 */
 	
 	public String getName(){
 		return this.name;

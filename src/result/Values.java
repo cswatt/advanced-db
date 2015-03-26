@@ -8,6 +8,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Values implements the JSONable interface and
+ * is responsible for the mapping of the array of values inside
+ * the retrieved json document, as well as their count.
+ */
+
 public class Values implements JSONable{
 	private static final long serialVersionUID = -7934442049449016087L;
 	
@@ -23,6 +33,10 @@ public class Values implements JSONable{
 		
 	}
 	
+	/**
+	 * Get & Set methods for the fields of Values, count
+	 * @return
+	 */
 	public List<Value> getValues(){
 		return this.values;
 	}
@@ -39,6 +53,10 @@ public class Values implements JSONable{
 		this.count = count;
 	}
 	
+	/**
+	 * Prints the fields of each Value instance in the array of values
+	 * @param field
+	 */
 	public void printValues(String field){
 		for(int i=0;i<values.size();i++){
 			if(field.equals("id"))
@@ -51,6 +69,11 @@ public class Values implements JSONable{
 			
 	}
 	
+	/**
+	 * Method that maps the values in the json document to the class fields
+	 * based on their respective annotation 
+	 * 
+	 */
 	@Override
     public String toJSONString() {
         Gson gson = new GsonBuilder()

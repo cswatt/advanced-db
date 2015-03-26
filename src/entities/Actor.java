@@ -3,6 +3,12 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Actor maps the necessary fields of a person who is an actor. 
+ */
 public class Actor extends Person{
 
 	private List<Film> movies;
@@ -12,6 +18,10 @@ public class Actor extends Person{
 		super(name,dateOfBirth,placeOfBirth);
 	}
 	
+	/**
+	 * Get & Set methods for fields movies, tv shows
+	 * @return
+	 */
 	public List<Film> getMovies(){
 		return this.movies;
 	}
@@ -28,6 +38,10 @@ public class Actor extends Person{
 		this.tvShows = tvShows;
 	}
 	
+	/**
+	 * Returns the combined filmography of the actor
+	 * @return
+	 */
 	public List<Film> getFilmography(){
 		List<Film> filmography = new ArrayList<Film>();
 		if (movies != null) filmography.addAll(movies);
@@ -35,6 +49,10 @@ public class Actor extends Person{
 		return filmography;
 	}
 	
+	/**
+	 * Prints the information about the actor
+	 * @return
+	 */
 	public void print(){
 		System.out.println();
 		if(!movies.isEmpty()){

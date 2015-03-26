@@ -1,5 +1,12 @@
 package entities;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Film maps the necessary fields of a film/tvshow an actor has appeared in. 
+ */
+
 public class Film implements Comparable<Film>{
 	
 	private String name;
@@ -10,6 +17,10 @@ public class Film implements Comparable<Film>{
 		this.character = character;
 	}
 	
+	/**
+	 * Get & Set methods for fields name, character in film
+	 * @return
+	 */
 	public String getName(){
 		return (this.name == null) ? "" : this.name;
 	}
@@ -25,6 +36,8 @@ public class Film implements Comparable<Film>{
 	public void setCharacter(String character){
 		this.character = character;
 	}
+	
+	
 	public int compareTo(Film otherfilm){
 		String a = name;
 		if (a==null) a = "";

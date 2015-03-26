@@ -1,30 +1,22 @@
 package service;
 
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.jayway.jsonpath.JsonPath;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import result.MQLResult;
-import result.Result;
-import result.SearchResult;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import output.QueryBox;
-
 /**
- * Makes a request to the Freebase MQL API
- * Creates an MQLResult object.
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * 
+ * Makes a request to the Freebase MQL API based on a specific query
+ * and creates an MQLResult object by parsing the retrieved json document.
  */
 public class MQLService extends Service{
 	private String query;

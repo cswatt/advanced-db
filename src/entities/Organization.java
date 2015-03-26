@@ -1,5 +1,12 @@
 package entities;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Organization maps the necessary fields of an organization a business person is associated with. 
+ */
+
 public class Organization {
 	
 	private String name;
@@ -24,6 +31,12 @@ public class Organization {
 		this.name = name;
 	}
 	
+	/**
+	 * Get & Set methods for fields name, organization's leader role, title, from date, to date,
+	 * organization's board member's role, title, from date, to date, organization's boolean values
+	 * of having a leader, founder, board member
+	 * @return
+	 */
 	public String getName(){
 		return this.name;
 	}

@@ -1,6 +1,9 @@
 package result;
 /**
- * Represents a person who performed as a role in creating something.
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * 
+ * Represents a person who performed as a role in creating/doing something.
  * For instance, (Jonathan Franzen, author)
  */
 public class Role implements Comparable<Role> {

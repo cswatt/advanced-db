@@ -1,10 +1,6 @@
 package service;
 
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.jayway.jsonpath.JsonPath;
 
@@ -12,21 +8,21 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import result.Result;
 import result.SearchResult;
 import result.TopicResult;
 import result.Type;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import output.EntityBox;
 
 /**
- * Makes a request to the Search API
- * and creates a SearchResult object
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ *
+ * Makes a request to the Search API based on a specific query
+ * and creates a SearchResult object by parsing the retrieved json document.
  */
 public class SearchService extends Service{
 	private String query;

@@ -2,16 +2,21 @@ package output;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import result.MQLResult;
 import result.Role;
+
 /**
+ * 
+ * @author Cecilia Watt (ciw2104)
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * 
  * Given an MQLResult object, prints a list of formatted results
  */
+
 public class QueryBox extends Output{
 	private MQLResult result;
 	private Map<Role, List<String>> mql_map;

@@ -5,14 +5,17 @@ import java.io.InputStreamReader;
 import creator.EntityBoxCreator;
 import creator.QueryBoxCreator;
 
-import output.EntityBox;
 
-import result.SearchResult;
-import result.TopicResult;
-import result.Type;
-import service.SearchService;
-import service.TopicService;
-
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Retriever is responsible for getting the initial input from the user and call 
+ * afterwards the appropriate methods to do the searching, based on the type of input.
+ * If the user input is an entity, then the Retriever calls the EntityBoxCreator otherwise
+ * if the user input is a query ("Who created [X]"), then after modifying the query, the Retriever
+ * calls the QueryBoxCreator.
+ */
 
 public class Retriever {
 

@@ -3,6 +3,13 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class BusinessPerson maps the necessary fields of a person who is an business person. 
+ */
+
 public class BusinessPerson extends Person{
 	
 	private List<Organization> organizations;
@@ -15,6 +22,13 @@ public class BusinessPerson extends Person{
 		
 		this.setIsBusinessPerson(true);
 	}
+	
+	/**
+	 * Get & Set methods for fields organizations the person is generally associated with, 
+	 * organizations the person is a leader of, organizations the person is a board member of,
+	 * organizations the person has founded
+	 * @return
+	 */
 	
 	public List<Organization> getOrganizations(){
 		return this.organizations;
@@ -48,6 +62,11 @@ public class BusinessPerson extends Person{
 	public List<Organization> getOrgsOnboard(){
 		return this.organizations_onboard;
 	}
+	
+	/**
+	 * Prints information about the business person
+	 * @return
+	 */
 	public void print(){
 		
 		if(this.getOrganizations().size() > 0){

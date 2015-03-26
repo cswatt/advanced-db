@@ -3,8 +3,16 @@ package entities;
 import java.util.List;
 
 
+/**
+ * @author Aikaterini Iliakopoulou (ai2315)
+ * @author Cecilia Watt (ciw2104)
+ * 
+ * Class Person maps the necessary fields of a person. 
+ */
+
 public class Person {
 	
+	//notable properties
 	private String name;
 	private String dateOfBirth;
 	private String placeOfBirth;
@@ -26,6 +34,14 @@ public class Person {
 		this.dateOfBirth = dateOfBirth;
 		this.placeOfBirth = placeOfBirth;
 	}
+	
+	
+	/**
+	 * Get & Set methods for fields name, date of birth, place of birth, date of death, 
+	 * place of death, cause of death, list of siblings, list of spouses, person's description
+	 * boolean values of whether it is a business person, actor or author.
+	 * @return
+	 */
 	
 	public String getName(){
 		return this.name;
@@ -123,6 +139,9 @@ public class Person {
 		this.isAuthor = isAuthor;
 	}
 
+	/**
+	 * prints information about the author
+	 */
 	public void print(){
 		System.out.println("---------------PERSON---------------");
 		System.out.println("Name: "+ name);
