@@ -60,29 +60,67 @@ RUN:
 ==================================
 The main method in Retriever prompts the user for input.
 
-[determining whether to call EntityBoxCreator or QueryBoxCreator]
+[INFOBOX QUERY INPUT]
 
-a. If the user enters an infobox query, an EntityBoxCreator object will be instantiated. EntityBoxCreator creates a SearchService object using the provided API key and the query. The requestInfo() method in SearchService is then called.
+If the user enters an infobox query, an EntityBoxCreator object will be instantiated. 
 
-This will retrieve a maximum of 20 results, from which TopicService and TopicResult objects will be created in order to see what types of entities this particular mId matches to. Each SearchService object has a set of the entities this program is looking for. It simply takes the intersection of this set and the entities retrieved by TopicResult.getTypes(). If the intersection is empty for all 20 results, an error message is printed and the program exits. 
+EntityBoxCreator creates a SearchService object using the provided API key and the query. 
 
-The first search result for which the intersection is not empty is chosen, and a SearchResult object is created. SearchResult simply represents what was retrieved in that search, primarily the entity's name and mId. 
+The requestInfo() method in SearchService is then called. This will retrieve a maximum of 20 results using the Freebase Search API, 
 
-EntityBoxCreator fetches the mId and creates a TopicService object using the API key and the mId. The requestInfo() method in TopicService is then called.
+from which TopicResult objects will be created based on the retrieved mIds, using the TopicService methods, 
 
-[creating TopicResult, mapping]
+in order to see what types of entities each mId matches to. Each SearchService object has a 
 
-Finally, EntityBoxCreator creates an EntityBox object with TopicResult as a parameter, and calls print(). EntityBox looks at the types of entities the TopicResult contains, and prints out a formatted view of desired information to the console.
+set of the entities the program is looking for, which can be PERSON, BUSINESSPERSON, ACTOR, AUTHOR, LEAGUE or TEAM. 
 
-b. If the user enters a question in the form "Who created X?" a QueryBoxCreator object will be instantiated. QueryBoxCreator creates an MQLService object using the provided API key and the processed query (the X from the question). The requestInfo() method in MQLService is called.
+If all 20 Topic Results, which are created based on the 20 mIds returned by Freebase Search API,
 
-MQLService will then make two requests to the API: first, it assumes that X is a book title and will search for authors who wrote books with X in the title; next, it assumes that X is an organization name and will search for businesspeople who founded organizations with X in the name. MQLService then creates an MQLResult object, passing in the two JSONArray responses as parameters.
+don't contain any of those types then an error message is printed and the program exits. 
 
-MQLResult parses the two JSONArrays. For each object in each array, the name of the person and the name of the creation are extracted. A Role object is created, which holds the person's name and the job through which they created their creation. A Map is populated with each pairing of role and creation.
+Otherwise, the first mId that corresponds to at least one type contained in the above set is chosen, and a SearchResult object is created. 
+
+SearchResult contains entity's name, mId, id and notable_id, although essentially only mId is used by the program.
+
+In the next step, EntityBoxCreator fetches the mId and creates a TopicService object using the API key and the mId. 
+
+The requestInfo() method in TopicService is then called, which calls the Freebase Topic API using the given mId and creates a Topic Result
+
+object by parsing the json document that is returned by the API. The mapping of the values of the json document happens inside the
+
+Topic Result instance, where the different types associated with the topic are identified. Then, given the identified types the respective
+
+mapping methods are called that parse the json document in search of the required fields that are necessary to form the output. 
+
+Finally, EntityBoxCreator creates an EntityBox object given the TopicResult that is created by parsing the retrieved json document,
+
+and calls print() method to output the desired information in a formatted view to the console. 
+
+[QUESTION INPUT]
+
+If the user enters a question in the form "Who created [X]?" a QueryBoxCreator object will be instantiated. 
+
+QueryBoxCreator creates an MQLService object using the provided API key and the processed query (the X from the question). 
+
+The requestInfo() method in MQLService is then called.
+
+MQLService makes two requests to the API: first, it assumes that X is a book title and will search for authors who wrote books with X 
+
+in the title; next, it assumes that X is an organization name and will search for businesspeople who founded organizations with named X. 
+
+MQLService then creates an MQLResult object, passing in the two JSONArray responses [??? where did those come from] as parameters.
+
+MQLResult parses the two JSONArrays. For each object in each array, the name of the person and the name of the creation [you mean organization - founder?] 
+
+are extracted. A Role object is created, which holds the person's name and the job through which they created their creation [what is creation? -define it].
+
+A Map inside MQLResult instance is populated with each pairing of role and creation.
 
 QueryBoxCreator creates a QueryBox object with MQLResult as a parameter.
 
-QueryBox gets the mql_map fromo MQLResult.getMQLMap(), and puts the keys into a List which is then sorted in alphabetical order by the person's first name. The items from this list and their associated values in the map are then printed to console. 
+QueryBox gets the mql_map from MQLResult.getMQLMap() method, and puts the keys into a List which is then sorted in alphabetical order 
+
+by the person's first name. The items from this list and their associated values in the map are then printed to console. 
 
 ==================================
 [005] FREEBASE API KEY
