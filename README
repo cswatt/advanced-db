@@ -51,9 +51,13 @@ Retriever.java
 ==================================
 [002] HOW TO RUN
 ==================================
+COMPILE:
+javac -cp .:libs/slf4j-simple-1.7.10.jar:libs/slf4j-api-1.7.5.jar:libs/json-smart-1.2.jar:libs/json-path-0.9.0.jar:libs/json_simple-1.1.jar:libs/gson-2.3.1.jar:libs/google-http-client-1.18.0-rc.jar Retriever.java
 
 RUN:
+java -cp .:libs/slf4j-simple-1.7.10.jar:libs/slf4j-api-1.7.5.jar:libs/json-smart-1.2.jar:libs/json-path-0.9.0.jar:libs/json_simple-1.1.jar:libs/gson-2.3.1.jar:libs/google-http-client-1.18.0-rc.jar Retriever
 
+You will then be prompted for API key and query.
 ==================================
 [003] HIGH LEVEL DESCRIPTION
 ==================================
@@ -125,3 +129,4 @@ by the person's first name. The items from this list and their associated values
 [005] FREEBASE API KEY
 ==================================
 AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho
+10 requests per second
