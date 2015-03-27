@@ -37,7 +37,9 @@ public class Film implements Comparable<Film>{
 		this.character = character;
 	}
 	
-	
+	/**
+	 * Makes it possible for lists of films to be alphabetized by name.
+	 */
 	public int compareTo(Film otherfilm){
 		String a = name;
 		if (a==null) a = "";
