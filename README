@@ -69,9 +69,19 @@ The requestInfo() method in SearchService is then called. This will retrieve a m
 
 from which TopicResult objects will be created based on the retrieved mIds, using the TopicService methods, 
 
-in order to see what types of entities each mId matches to. We construct TopicResult objects for each of these search results in order to see all of the entities they have performed a role as. It would be more lightweight to simply check the "notable" field that is easily accessed through the Search API, but this would only show people whose most notable role is as a businessperson, actor, or author. Using the TopicResult objects, we are able to more comprehensively see all the entities a person has. 
+in order to see what types of entities each mId matches to. We construct TopicResult objects for each of these search results 
+
+to see all of the entities they have performed a role as. It would be more lightweight to simply check the "notable" field that 
+
+is easily accessed through the Search API, but this would only show people whose most notable role is as a businessperson, actor,
+
+or author. Using the TopicResult objects, we are able to more comprehensively see all the entities a person has. 
 
 Each SearchService object has a set of the entities the program is looking for, which can be PERSON, BUSINESSPERSON, ACTOR, AUTHOR, LEAGUE or TEAM. 
+
+The algorithm first searches the first Topic Results and if none of those types are contained in them then the next five Topic Results 
+
+are checked, until a total of 20 Topic Results are examined. 
 
 If all 20 Topic Results, which are created based on the 20 mIds returned by Freebase Search API,
 
@@ -90,6 +100,162 @@ object by parsing the json document that is returned by the API. The mapping of 
 Topic Result instance, where the different types associated with the topic are identified. Then, given the identified types the respective
 
 mapping methods are called that parse the json document in search of the required fields that are necessary to form the output. 
+
+Specifically, the values from the json documents mapped to the different entities in the program are the following:
+
+ --- PERSON ENTITY
+ 		
+ 	 [/type/object/name] --> name of the person: a person can only have one name, therefore one value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the name of the person. 
+ 	 
+ 	 [/people/person/date_of_birth] --> date of birth of the person: a person can only have one date of birth, therefore one value object 
+ 	 for that field exists inside the json document. We use the text field of the value object to retrieve the date of birth of the person. 
+ 	 
+ 	 [/people/person/place_of_birth] --> place of birth of the person: a person can only have one place of birth, therefore one value object 
+ 	 for that field exists inside the json document. We use the text field of the value object to retrieve the place of birth of the person.
+ 	 
+ 	 [/people/deceased_person/date_of_death] --> date of death of the person: a person can only have one date of death, therefore one value object 
+ 	 for that field exists inside the json document. We use the text field of the value object to retrieve the date of death of the person.
+ 	 
+ 	 [/people/deceased_person/place_of_death] --> place of death of the person: a person can only have one place of death, therefore one value object 
+ 	 for that field exists inside the json document. We use the text field of the value object to retrieve the place of death of the person.
+ 	 
+ 	 [/common/topic/description] --> person's description: a person can only have one description about themselves, therefore one value object 
+ 	 for that field exists inside the json document. Because the text field of the value object contains a cut version of the description field, we use
+ 	 the value field to retrieve the whole piece of information.
+ 	 
+ 	 [/people/deceased_person/cause_of_death] --> causes of death of the person: a person can have multiple causes of death, or have their cause
+ 	 of death described in various ways. Therefore, more than one value object might exist for that field inside the json document. To map the different
+ 	 value object, we use the Values class which creates instances of Value class. Both classes implement the JSONable interface that uses the Google-Gson library
+ 	 to map annotated fields inside a json documents to specific fields in the class. Value class contains the following fields, which are mapped with the 
+ 	 help of the Google-Gson library: text (String), value (String), id (String), timestamp (String), property (JSONObject). The property field might contain more
+ 	 information structured in value objects. Eventually, we use the text field of each mapped value object to retrieve the various causes of death for the person.
+ 	 
+ 	 [/people/person/sibling_s] --> siblings of the person: a person can have more than one sibling. Therefore similar to the 'cause of death' field we map 
+ 	 the different value objects to instances of value class. Because more information than the one we want is included in the json document we need to do further
+ 	 processing compared to the previous cases. The required information resides within the property field of each value instance and can be retrieved by mapping the 
+ 	 additional field [/people/sibling_relationship/sibling] and ultimately use the text field from the returned value object to retrieve the name of the sibling. Since
+ 	 a sibling can have only one name, one value object for that field exists inside the json document.
+ 	 
+ 	 [/people/person/spouse_s] --> spouses of the person: a person can have more than one spouse over the years of their life. Because we require additional information 
+ 	 related to the spouse, such as the period of time the spouse was married to the person in question, and their marriage location, we choose to create Spouse instances
+ 	 for each spouse that contain all this information. Therefore, similar to the siblings field we map the value objects to values instances and after parse the property
+ 	 json object for the following values: [/people/marriage/spouse], [/people/marriage/from], [/people/marriage/to], [/people/marriage/location_of_ceremony] to retrieve spouse's
+ 	 name, period of marriage, and marriage location respectively. Because all of those values exist only once for each spouse of the perso, one value object for that field exists 
+ 	 inside the json document. Eventually, we use the text field to retrieve the required information.
+ 	 
+ ---BUSINESS PERSON ENTITY
+ 
+ 	 A business person might be associated with an organization in various ways (be the founder/ leader/ board member). Once a new organization is retrieved (a new name) from
+ 	 the json document, a new instance of the organization class is created and the additional information that is related to it is added to the instance's fields. In case
+ 	 the organization has already been detected because the person is associated with the particular organization in more than one ways, the instance is found and the additional
+ 	 information is added to it. 
+ 
+ 	 [/organization/organization_founder/organizations_founded] --> organizations founded by the person: a person can be the founder of more than one organization. We are only interested 
+ 	 in the name of those organizations so after we map the json section of the document to the Values instance we parse each value object and retrieve the text field for each object to
+ 	 get the name. 
+ 	 
+ 	 [/business/board_member/leader_of] --> organizations the person is a leader of: a person can be the leader of more than one organizations. We are interested in organization's name,
+ 	 the person's title, role and period of leadership. Therefore, after mapping the values object to value instances, we parse their property field to look for 
+ 	 [/organization/leadership/organization],[/organization/leadership/title], [/organization/leadership/role], [/organization/leadership/from], [/organization/leadership/to] respectively. 
+ 	 We use the text fields of those value objects, parsed from the property JSONObject to retrieve the required information.
+ 	 
+ 	 [/business/board_member/organization_board_memberships] --> organizations the person is a board member of: a person can be a borad member of more than one organizations. We are interested 
+ 	 in organization's name, the person's title, role and period of membership. Therefore, after mapping the values object to value instances, we parse their property field to look for 
+ 	 [/organization/organization_board_membership/organization],[/organization/organization_board_membership/title], [/organization/organization_board_membership/role], 
+ 	 [/organization/organization_board_membership/from], [/organization/organization_board_membership/to] respectively. We use the text fields of those value objects,
+ 	 parsed from the property JSONObject to retrieve the required information.
+ 	 
+ ---AUTHOR ENTITY
+ 
+ 	 [/book/author/works_written] --> list of books written by the author: an author might have written more than one books. We map the value objects to value instances and retrieve the name 
+ 	 of each book by using their text field. 	 
+ 	 
+ 	 [/book/book_subject/works] --> list of books about the author: an author might have more than one book written about him. We map the value objects to value instances and retrieve the name 
+ 	 of each book by using their text field.
+ 	 
+ 	 [/influence/influence_node/influenced] --> list of peoples' names the author has influenced. We map the value objects to value instances and retrieve the name 
+ 	 of each person by using their text field.
+ 	 
+ 	 [/influence/influence_node/influenced_by] --> list of peoples' names the author was influenced by. We map the value objects to value instances and retrieve the name 
+ 	 of each person by using their text field.
+ 	 
+---ACTOR ENTITY
+	 A person is an actor if they have appeared in a movie or a tv show. In case, they have appeared in both movies and tv shows we map both types of information. We create a Film class that 
+	 contains all the required information related to the character the actor played in the movie or the tv show, as well as the name of the movie and the tv show. 
+	 
+	 [/film/actor/film] --> list of movies the person has appeared in. We map the value objects to value instances and to retrieve the additional information about the actor's character in
+	 the movie and the name of the movie we have to parse the property JSONObject for the fields [/film/performance/character] and [/film/performance/film] respectively. We use the text field
+	 to retrieve the required information.
+	 
+	 [/tv/tv_actor/starring_roles] --> list of tv shows the person has appeared in. We map the value objects to value instances and to retrieve the additional information about the actor's character in
+	 the tv show and the name of the tv show we have to parse the property JSONObject for the fields [/tv/regular_tv_appearance/character] and [/tv/regular_tv_appearance/series] respectively. We use the text field
+	 to retrieve the required information.
+	 
+---LEAGUE ENTITY	
+
+     [/type/object/name] --> name of the league: a league can only have one name, therefore one value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the name of the league.
+ 	 
+ 	 [/sports/sports_league/sport] --> sport associated with the league: One value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the sport associated with the league.
+ 	 
+ 	 [/sports/sports_league/championship] --> championship associated with the league: One value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the championship associated with the league.
+ 	 
+ 	 [/organization/organization/slogan] --> league's slogan: One value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the league's slogan.
+ 	 
+ 	 [/common/topic/official_website] --> league's website: One value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the league's website.
+ 	 
+	 [/common/topic/description] --> league's description: One value object for that field exists inside
+ 	 the json document. We use the value field of the value object to retrieve the league's description. 
+ 	 
+ 	 [/sports/sports_league/teams] --> teams that participate in the league: We map the value objects to value instances and to retrieve each team's name by parsing the property JSONObject 
+ 	 for the field [/sports/sports_league_participation/team]. We use the text field to retrieve the required information.
+ 	 
+---TEAM ENTITY	 
+
+	 [/type/object/name] --> name of the team: a team can only have one name, therefore one value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the name of the team.
+ 	 
+ 	 [/sports/sports_team/sport] --> sport associated with the team: One value object for that field exists inside
+ 	 the json document. We use the text field of the value object to retrieve the sport associated with the team.
+ 	 
+ 	 [/common/topic/description] --> teams's description: One value object for that field exists inside
+ 	 the json document. We use the value field of the value object to retrieve the teams's description. 
+ 	 
+ 	 [/sports/sports_team/arena_stadium] --> teams's arena: One value object for that field exists inside
+ 	 the json document. We use the value field of the value object to retrieve the teams's arena. 
+ 	 
+ 	 [/sports/sports_team/founded] --> the year when the team was founded in: One value object for that field exists inside
+ 	 the json document. We use the value field of the value object to retrieve the year the team was founded.
+ 	 
+ 	 [/sports/sports_team/location] --> the locations the team is associated with:We map the value objects to value instances and to retrieve each team's location using the text field of each
+ 	 value object.
+ 	 
+ 	 [/sports/sports_team/championships] --> the championships the team has won:We map the value objects to value instances and to retrieve each team's championship using the text field of each
+ 	 value object.
+ 	 
+ 	 [/sports/sports_team/coaches] --> the coaches of the team: We map the value objects to value instances and to retrieve information about each coach by parsing the property JSONObject 
+ 	 for the fields [/sports/sports_team_coach_tenure/coach], [/sports/sports_team_coach_tenure/from], [/sports/sports_team_coach_tenure/to], [/sports/sports_team_coach_tenure/position] for coach' name,
+ 	 period of coaching the team and position respectively. We use the text field to retrieve the required information.
+ 	 
+ 	 [/sports/sports_team/league] --> the leagues the team participates: We map the value objects to value instances and to retrieve information about each coach by parsing the property JSONObject 
+ 	 for the field [/sports/sports_team/league] for each league's name. We use the text field to retrieve the required information.
+ 	 
+ 	 [/sports/sports_team/roster] --> the players of the team: We map the value objects to value instances and to retrieve information about each coach by parsing the property JSONObject 
+ 	 for the fields [/sports/sports_team_roster/player], [/sports/sports_team_roster/from], [/sports/sports_team_roster/to], [/sports/sports_team_roster/position], [/sports/sports_team_roster/number] for player's name,
+ 	 period of playing in the team and position and number respectively. We use the text field to retrieve the required information.
+ 	 
+For each value that is mapped by the algorithm, we first check if it exists in the document to avoid throwing exceptions. In case a crucial
+
+value is omitted in the document, such as the name of an organization, then the respective field is not considered at all in the output. With respect to the date 
+
+field that corresponds to "to - date", if we don't find it inside the json document we assume that the relation continues to present so we substitute the to-date field
+ 
+with the value "now". 
 
 Finally, EntityBoxCreator creates an EntityBox object given the TopicResult that is created by parsing the retrieved json document,
 
