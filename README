@@ -70,9 +70,9 @@ The requestInfo() method in SearchService is then called. This will retrieve a m
 
 from which TopicResult objects will be created based on the retrieved mIds, using the TopicService methods, 
 
-in order to see what types of entities each mId matches to. Each SearchService object has a 
+in order to see what types of entities each mId matches to. We construct TopicResult objects for each of these search results in order to see all of the entities they have performed a role as. It would be more lightweight to simply check the "notable" field that is easily accessed through the Search API, but this would only show people whose most notable role is as a businessperson, actor, or author. Using the TopicResult objects, we are able to more comprehensively see all the entities a person has. 
 
-set of the entities the program is looking for, which can be PERSON, BUSINESSPERSON, ACTOR, AUTHOR, LEAGUE or TEAM. 
+Each SearchService object has a set of the entities the program is looking for, which can be PERSON, BUSINESSPERSON, ACTOR, AUTHOR, LEAGUE or TEAM. 
 
 If all 20 Topic Results, which are created based on the 20 mIds returned by Freebase Search API,
 
@@ -110,9 +110,9 @@ in the title; next, it assumes that X is an organization name and will search fo
 
 MQLService then creates an MQLResult object, passing in the two JSONArray responses [??? where did those come from] as parameters.
 
-MQLResult parses the two JSONArrays. For each object in each array, the name of the person and the name of the creation [you mean organization - founder?] 
+MQLResult parses the two JSONArrays. For each object in each array, the name of the person and the name of the book/organiation
 
-are extracted. A Role object is created, which holds the person's name and the job through which they created their creation [what is creation? -define it].
+are extracted. A Role object is created, which holds the person's name and the job through which they created their book/organization.
 
 A Map inside MQLResult instance is populated with each pairing of role and creation.
 
