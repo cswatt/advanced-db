@@ -53,7 +53,8 @@ public class TopicService extends Service{
 		      this.result.parseTopic();
 		
 		    } catch (Exception ex) {
-		      ex.printStackTrace();
+		    	System.out.println("Sorry! I couldn't find anything!");
+				return;
 		    }
 	}
 	

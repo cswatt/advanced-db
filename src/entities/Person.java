@@ -18,7 +18,7 @@ public class Person {
 	private String placeOfBirth;
 	private String placeOfDeath;
 	private String dateOfDeath;
-	private String causeOfDeath;
+	private List<String> causesOfDeath;
 	
 	private List<String> siblings;
 	private List<Spouse> spouses;
@@ -83,12 +83,12 @@ public class Person {
 		this.dateOfDeath = dateOfDeath;
 	}
 	
-	public String getCauseOfDeath(){
-		return this.causeOfDeath;
+	public List<String> getCauseOfDeath(){
+		return this.causesOfDeath;
 	}
 	
-	public void setCauseOfDeath(String causeOfDeath){
-		this.causeOfDeath = causeOfDeath;
+	public void setCauseOfDeath(List<String> causesOfDeath){
+		this.causesOfDeath = causesOfDeath;
 	}
 	
 	public List<String> getSiblings(){
@@ -152,8 +152,11 @@ public class Person {
 			System.out.println("Date Of Death: "+dateOfDeath);
 		if(placeOfDeath != null && !placeOfDeath.equals(""))
 			System.out.println("Place Of Death: "+placeOfDeath);
-		if(causeOfDeath != null && !causeOfDeath.equals(""))
-			System.out.println("Cause Of Death: "+causeOfDeath);
+		String causes = "";
+		if(causesOfDeath != null)
+			for(String cause : causesOfDeath)
+				causes +=cause+",";
+		System.out.println("Cause Of Death: "+causes);
 		
 		if(siblings.size() > 0){
 			System.out.print("Siblings: ");

@@ -72,7 +72,7 @@ public class TopicResult{
 				types.add(Type.AUTHOR);
 				continue;
 			}
-			if(value.getId().equals("/business/board_member")){
+			if(value.getId().equals("/business/board_member") || value.getId().equals("/organization/organization_founder")){
 				types.add(Type.BUSINESSPERSON);
 				continue;
 			}
@@ -148,9 +148,9 @@ public class TopicResult{
 		String placeOfBirth = null;
 		String dateOfDeath = null;
 		String placeOfDeath = null;
-		String causeOfDeath = null;
 		String description = null;
 		
+		List<String> causesOfDeath = new ArrayList<String>();
 		List<String> siblings = new ArrayList<String>();
 		List<Spouse> spouses = new ArrayList<Spouse>();
 		
@@ -168,9 +168,12 @@ public class TopicResult{
 			if(JsonPath.read(topic,"$.property['/people/deceased_person/place_of_death']").toString().contains("valuetype"))
 				placeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/place_of_death'].values[0].text").toString();
 		if(topic.toString().contains("\\/people\\/deceased_person\\/cause_of_death"))
-			if(JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death']").toString().contains("valuetype"))
-				causeOfDeath = JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death'].values[0].text").toString();
-				
+			if(JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death']").toString().contains("valuetype")){
+				String deathcause = JsonPath.read(topic,"$.property['/people/deceased_person/cause_of_death']").toString();
+				Values causes = gson.fromJson(deathcause, Values.class);
+				for(Value cause : causes.getValues())
+					causesOfDeath.add(cause.getText());
+			}
 		
 		//extract siblings
 		if(topic.toString().contains("\\/people\\/person\\/sibling_s")){
@@ -188,6 +191,7 @@ public class TopicResult{
 			if(JsonPath.read(topic,"$.property['/people/person/spouse_s']").toString().contains("valuetype")){
 				String res3 = JsonPath.read(topic,"$.property['/people/person/spouse_s']").toString();
 				Values spouses_objects = gson.fromJson(res3, Values.class);
+				
 				for(Value spouse_object : spouses_objects.getValues()){
 					if(JsonPath.read(spouse_object.getProperty(),"$./people/marriage/spouse").toString().contains("valuetype")){
 						Spouse spouse  = new Spouse(JsonPath.read(spouse_object.getProperty(),"$./people/marriage/spouse.values[0].text").toString());
@@ -218,7 +222,7 @@ public class TopicResult{
 		person = new Person(name,dateOfBirth,placeOfBirth);
 		person.setDateOfDeath(dateOfDeath);
 		person.setPlaceOfDeath(placeOfDeath);
-		person.setCauseOfDeath(causeOfDeath);
+		person.setCauseOfDeath(causesOfDeath);
 		person.setSiblings(siblings);
 		person.setSpouses(spouses);
 		person.setDescription(description);
@@ -454,12 +458,11 @@ public class TopicResult{
 			if(JsonPath.read(topic,"$.property['/film/actor/film']").toString().contains("valuetype")){
 				List<Film> actorsfilms = new ArrayList<Film>();
 				
-				String filmName = null;
-				String character = null;
-				
 				String filmsmade = JsonPath.read(topic,"$.property['/film/actor/film']").toString();
 				Values films = gson.fromJson(filmsmade, Values.class);
 				for(Value f : films.getValues()){
+					String filmName = null;
+					String character = null;
 					if(f.getProperty().toString().contains("\\/film\\/performance\\/character"))
 						if(JsonPath.read(f.getProperty(),"$./film/performance/character").toString().contains("valuetype"))
 							character = JsonPath.read(f.getProperty(),"$./film/performance/character.values[0].text").toString();
@@ -479,12 +482,11 @@ public class TopicResult{
 			if(JsonPath.read(topic,"$.property['/tv/tv_actor/starring_roles']").toString().contains("valuetype")){
 				List<Film> actorsfilms = new ArrayList<Film>();
 				
-				String filmName = null;
-				String character = null;
-				
 				String filmsmade = JsonPath.read(topic,"$.property['/tv/tv_actor/starring_roles']").toString();
 				Values films = gson.fromJson(filmsmade, Values.class);
 				for(Value f : films.getValues()){
+					String filmName = null;
+					String character = null;
 					if(f.getProperty().toString().contains("\\/tv\\/regular_tv_appearance\\/character"))
 						if(JsonPath.read(f.getProperty(),"$./tv/regular_tv_appearance/character").toString().contains("valuetype"))
 							character = JsonPath.read(f.getProperty(),"$./tv/regular_tv_appearance/character.values[0].text").toString();

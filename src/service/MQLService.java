@@ -44,7 +44,8 @@ public class MQLService extends Service{
 			MQLResult r = new MQLResult(book_results, organization_results);
 			setResult(r);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.out.println("Sorry! I couldn't find anything!");
+			return;
 		} 
 	}
 	

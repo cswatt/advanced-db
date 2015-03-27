@@ -30,10 +30,14 @@ public class EntityBoxCreator extends Creator{
 	public void create(){
 		SearchService sservice = new SearchService(apiKey, query);
 		sservice.requestInfo();
+		if(sservice.getResult() == null)
+			return;
 		String mId = sservice.getResult().getMid();
-
+		
 		TopicService tservice = new TopicService(apiKey,mId);
 		tservice.requestInfo();
+		if(tservice.getResult() == null)
+			return;
 		TopicResult result = tservice.getResult();
 		
 		EntityBox entityBox = new EntityBox(result);

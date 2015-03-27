@@ -44,7 +44,7 @@ public class Retriever {
 		
 		while(true){
 			System.out.println();
-			System.out.print("What would you like me to search for? ");
+			System.out.print("Feel curious? What would you like me to search for? ");
 			String query = null;
 			try {
 				query = br.readLine();
@@ -57,7 +57,7 @@ public class Retriever {
 				System.err.println("I am sorry, this is not a valid query - Please try again");
 				continue;
 			}
-			
+			System.out.println("Fetching information...");
 			//decide whether query is entity or mql
 			String[] qtokens = query.split("\\s+");
 			

@@ -95,8 +95,14 @@ public class SearchService extends Service{
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.out.println("Sorry! I couldn't find anything!");
+			return;
 		} 
+		if(found_result == null){
+			System.out.println("Sorry! I couldn't find anything!");
+			return;
+		}
+			
 		SearchResult r = new SearchResult(found_result);
 		setResult(r);
 	}

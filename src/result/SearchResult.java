@@ -36,7 +36,7 @@ public class SearchResult{
 		mid = JsonPath.read(search,"$.mid").toString();
 		id = JsonPath.read(search,"$.id").toString();
 		name = JsonPath.read(search,"$.name").toString();
-		notable_id = JsonPath.read(search, "$.notable.id").toString();
+		//notable_id = JsonPath.read(search, "$.notable.id").toString();
 	}
 	
 	/**

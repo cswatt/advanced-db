@@ -24,6 +24,7 @@ public class EntityBox extends Output{
 	private Set<Type> types;
 	private Set<Type> persontypes = new HashSet<Type>();
 	
+	
 	/**
 	 * instantiate an entitybox
 	 * @param result TopicResult
@@ -34,6 +35,7 @@ public class EntityBox extends Output{
 		persontypes.add(Type.ACTOR);
 		persontypes.add(Type.AUTHOR);
 		persontypes.add(Type.BUSINESSPERSON);
+		
 	}
 	
 	/**
@@ -78,7 +80,7 @@ public class EntityBox extends Output{
 		String placeOfBirth = p.getPlaceOfBirth();
 		String placeOfDeath = p.getPlaceOfDeath();
 		String dateOfDeath = p.getDateOfDeath();
-		String causeOfDeath = p.getCauseOfDeath();
+		List<String> causesOfDeath = p.getCauseOfDeath();
 		List<String> siblings = p.getSiblings();
 		List<Spouse> spouses = p.getSpouses();
 		String description = p.getDescription();
@@ -90,6 +92,12 @@ public class EntityBox extends Output{
 		center(fmt, name);
 	    fmt.format(newline());
 	    
+	    // print name
+	    if(dateOfBirth!=null){
+	    	leftalign(fmt, "Name:", p.getName());
+	    	fmt.format(newline());
+	    }
+	    
 	    // print birthday
 	    if(dateOfBirth!=null){
 	    	leftalign(fmt, "Birthday:", dateOfBirth);
@@ -100,7 +108,14 @@ public class EntityBox extends Output{
 	    if (dateOfDeath!=null){
 	    	String deathinfo = dateOfDeath;
 	    	if (placeOfDeath != null) deathinfo = deathinfo + " at " + placeOfDeath;
-	    	if (causeOfDeath != null) deathinfo = deathinfo + ", cause: " + causeOfDeath;
+	    	if (causesOfDeath != null){
+	    		String causeinfo = "";
+	    		for(String cause : causesOfDeath){
+	    			causeinfo += cause+",";
+	    		}
+	    		causeinfo = causeinfo.substring(0, causeinfo.length()-1);
+	    		deathinfo = deathinfo + ", cause: (" + causeinfo + ")";
+	    	}
 	    	leftalign(fmt, "Death:", deathinfo);
 	    	fmt.format(newline());
 	    }
@@ -124,15 +139,25 @@ public class EntityBox extends Output{
 	    
 	    // print spouses
 	    if (spouses != null && spouses.size() > 0) {
-	    	leftalign(fmt, "Spouse(s):", spouses.get(0).getName());
+	    	String spouseinfo = spouses.get(0).getName();
+	    	if ((spouses.get(0).getFrom()!= null) && (spouses.get(0).getTo() != null)){
+				spouseinfo = spouseinfo + " (" + spouses.get(0).getFrom() + " - " + spouses.get(0).getTo() + ")";
+			}
+			else if (spouses.get(0).getFrom() == null) spouseinfo = spouseinfo + " ( - " + spouses.get(0).getTo()+")";
+			else if (spouses.get(0).getTo() == null) spouseinfo = spouseinfo + " (" + spouses.get(0).getFrom() + ")";
+			if (spouses.get(0).getMarriageLocation() != null) spouseinfo = spouseinfo + " @ " + spouses.get(0).getMarriageLocation();
+	    	leftalign(fmt, "Spouse(s):", spouseinfo);
 	    	if (spouses.size() > 1){
 	    		for (Spouse spouse : spouses.subList(1, spouses.size())){
-	    			String spouseinfo = spouse.getName();
-	    			if ((spouse.getFrom()!= null) || (spouse.getTo() != null)){
-	    				if (spouse.getFrom() == null) spouseinfo = spouseinfo + " ( - " + spouse.getTo()+")";
-	    				if (spouse.getTo() == null) spouseinfo = spouseinfo + " (" + spouse.getFrom() + ")";
-	    				if ((spouse.getFrom() != null) && (spouse.getTo() != null)) spouseinfo = spouseinfo + " (" + spouse.getFrom() + " - " + spouse.getTo() + ")";
+	    			spouseinfo = spouse.getName();
+	    			if ((spouse.getFrom()!= null) && (spouse.getTo() != null)){
+	    				spouseinfo = spouseinfo + " (" + spouse.getFrom() + " - " + spouse.getTo() + ")";
 	    			}
+	    			else if (spouse.getFrom() == null && spouse.getTo().equals("now")){
+	    				//do nothing
+	    			}
+	    			else if (spouse.getFrom() == null) spouseinfo = spouseinfo + " ( - " + spouse.getTo()+")";
+	    			else if (spouse.getTo() == null) spouseinfo = spouseinfo + " (" + spouse.getFrom() + ")";
 	    			if (spouse.getMarriageLocation() != null) spouseinfo = spouseinfo + " @ " + spouse.getMarriageLocation();
 	    			leftalign(fmt, "", spouseinfo);
 	    		}
@@ -164,6 +189,8 @@ public class EntityBox extends Output{
 		if (organizations_led != null && organizations_led.size() > 0) {
 			leftalign(fmt, "Leadership:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_led){
+				if(org.getName() == null || org.getName().equals(""))
+					continue;
 				leftalign(fmt, "", snewline());
 				leftalign(fmt, "", org.getName(), org.getLeaderRole(), org.getLeaderTitle(), org.getLeaderFrom() + " - " + org.getLeaderTo());
 			}
@@ -174,6 +201,8 @@ public class EntityBox extends Output{
 		if (organizations_onboard != null && organizations_onboard.size() > 0) {
 			leftalign(fmt, "Board member:", "Organization", "Role", "Title", "From-To");
 			for (Organization org : organizations_onboard){
+				if(org.getName() == null || org.getName().equals(""))
+					continue;
 				leftalign(fmt, "",snewline());
 				leftalign(fmt, "", org.getName(), org.getBoardMemberRole(), org.getBoardMemberTitle(), org.getBoardMemberFrom() + " - " + org.getBoardMemberTo());
 			}
@@ -185,6 +214,8 @@ public class EntityBox extends Output{
 			leftalign(fmt, "Founded:", organizations_founded.get(0).getName());
 	    	if (organizations_founded.size() > 1){
 	    		for (Organization org : organizations_founded.subList(1, organizations_founded.size())){
+	    			if(org.getName() == null || org.getName().equals(""))
+						continue;
 	    			leftalign(fmt, "", org.getName());
 	    		}
 	    	}
@@ -265,7 +296,7 @@ public class EntityBox extends Output{
 		// print films
 		if (films != null && films.size() > 0){
 			Collections.sort(films);
-			leftalign(fmt, "Films:", "Character", "Film Name");
+			leftalign(fmt, "Films:", "Character", "Film Name/Tv Show");
 			leftalign(fmt, "", snewline());
 			for (Film film : films){
 				leftalign(fmt, "", film.getCharacter(), film.getName());
@@ -293,7 +324,11 @@ public class EntityBox extends Output{
 		
 		// print header
 		fmt.format(newline());
-		center(fmt, name);
+		center(fmt, name + " (LEAGUE)");
+	    fmt.format(newline());
+	    
+	    // print header
+	    leftalign(fmt, "Name:", name);
 	    fmt.format(newline());
 	    
 	    // print sport
@@ -360,7 +395,7 @@ public class EntityBox extends Output{
 		
 		// print header
 		fmt.format(newline());
-	    center(fmt, name); 
+	    center(fmt, name+ " (SPORTS TEAM)"); 
 	    fmt.format(newline());
 	    
 	    // print name
@@ -412,14 +447,14 @@ public class EntityBox extends Output{
 	    	leftalign(fmt, "Locations:", locations.get(0));
 	    	if (locations.size() > 1){
 	    		for (String location : locations.subList(1, locations.size())){
-	    			leftalign(fmt, "Locations:", location);
+	    			leftalign(fmt, "", location);
 	    		}
 	    	}
 	    	fmt.format(newline());
 	    }
 	    
 	    // print coaches
-	    if (coaches != null){
+	    if (coaches != null && coaches.size()>0){
 			//Collections.sort(films);
 	    	leftalign(fmt, "Coaches:", "Name", "Position", "From/To");
 			leftalign(fmt, "", snewline());
@@ -431,7 +466,7 @@ public class EntityBox extends Output{
 		}
 	    
 	    // print players
-	    if (players != null){
+	    if (players != null && players.size()>0){
 			//Collections.sort(films);
 	    	leftalign(fmt, "Players:","Name", "Position", "Number", "From/To");
 	    	leftalign(fmt, "", snewline());

@@ -28,7 +28,12 @@ public class QueryBoxCreator extends Creator{
 	 */
 	public void create(){
 		MQLService service = new MQLService(apiKey, query);
+		
+		if(service.getResult() == null)
+			return;
+		
 		MQLResult mqlresult = service.getResult();
+		
 		QueryBox queryBox = new QueryBox(mqlresult);
 		queryBox.print();
 	}
