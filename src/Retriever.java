@@ -65,7 +65,7 @@ public class Retriever {
 				query = query.replace(qtokens[0], "");
 				query = query.replace(qtokens[1], "");
 				if(query.contains("?"))
-					query = query.replaceAll("?", "");
+					query = query.replace("?", "");
 			
 				QueryBoxCreator qcreator = new QueryBoxCreator(apiKey,query);
 				
