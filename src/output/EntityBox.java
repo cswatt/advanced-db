@@ -60,6 +60,10 @@ public class EntityBox extends Output{
 		persontypes.retainAll(types);
 		String s = persontypes.toString();
 		s = "(" + s.substring(1, s.length()-1) + ")";
+		
+		if (!types.contains(Type.BUSINESSPERSON) && !types.contains(Type.AUTHOR) && !types.contains(Type.ACTOR)){
+			s = "(PERSON)";
+		}
 		return s;
 	}
 	
