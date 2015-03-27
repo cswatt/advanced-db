@@ -273,11 +273,34 @@ MQLService makes two requests to the API: first, it assumes that X is a book tit
 
 in the title; next, it assumes that X is an organization name and will search for businesspeople who founded organizations with named X. 
 
-MQLService then creates an MQLResult object, passing in the two JSONArray responses [??? where did those come from] as parameters.
+For books, we search for 
+[{"/book/author/works_written": 
+	[{"a:name": null,
+	"name~=": X}],
+"id": null,
+"name": null,
+"type": "/book/author"}]"
+
+For organizations, we search for 
+[{"/organization/organization_founder/organizations_founded": 
+	[{"a:name": null,
+	"name~=": X}],
+"id": null,
+"name": null,
+"type": "/organization/organization_founder"}]"
+
+Each of these queries returns a JSONArray response.
+
+MQLService then creates an MQLResult object, passing in the two JSONArray responses as parameters.
 
 MQLResult parses the two JSONArrays. For each object in each array, the name of the person and the name of the book/organiation
 
-are extracted. A Role object is created, which holds the person's name and the job through which they created their book/organization.
+are extracted. We simply look for the person's name, designated with $.name, and either 
+$./book/author/works_written[*].a:name
+$./organization/organization_founder/organizations_founded[*].a:name 
+depending on which JSONArray we are currently parsing.
+
+A Role object is created, which holds the person's name and the job through which they created their book/organization.
 
 A Map inside MQLResult instance is populated with each pairing of role and creation.
 
