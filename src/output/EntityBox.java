@@ -465,7 +465,7 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * center something
+	 * center a string of text
 	 * @param f formatter
 	 * @param name the thing you want to center
 	 */
@@ -478,7 +478,8 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * left align fields
+	 * left-align an entry with one category label, and
+	 * one corresponding field
 	 * @param f formatter
 	 * @param label category name
 	 * @param value 
@@ -489,7 +490,7 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * wrap a long piece of text
+	 * wrap a long piece of text designated by one category label
 	 * @param f formatter
 	 * @param label category name
 	 * @param value
@@ -506,7 +507,8 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * left align fields
+	 * left-align an entry with one category label, and
+	 * two corresponding fields
 	 * @param f formatter
 	 * @param label category name
 	 * @param value1
@@ -520,7 +522,8 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * left align fields
+	 * left-align an entry with one category label, and
+	 * three corresponding fields
 	 * @param f formatter
 	 * @param label category name
 	 * @param value1
@@ -536,7 +539,8 @@ public class EntityBox extends Output{
 	}
 	
 	/**
-	 * left align fields
+	 * left-align an entry with one category label, and
+	 * four corresponding fields
 	 * @param f formatter
 	 * @param label category name
 	 * @param value1
