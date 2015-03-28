@@ -1,9 +1,3 @@
-==================================
-Aikaterini Iliakopoulou (ai2315)
-Cecilia Watt (ciw2104)
-COMS E6111 Project #2
-DUE March 27 2015
-==================================
 [001] List of Files
 [002] How to Run
 [003] High-Level Description
@@ -48,12 +42,6 @@ Retriever.java
 	SearchService.java
 	TopicService.java
 	MQLService.java
-==================================
-[002] HOW TO RUN
-==================================
-
-RUN:
-
 ==================================
 [003] HIGH LEVEL DESCRIPTION
 ==================================
@@ -309,9 +297,3 @@ QueryBoxCreator creates a QueryBox object with MQLResult as a parameter.
 QueryBox gets the mql_map from MQLResult.getMQLMap() method, and puts the keys into a List which is then sorted in alphabetical order 
 
 by the person's first name. The items from this list and their associated values in the map are then printed to console. 
-
-==================================
-[005] FREEBASE API KEY
-==================================
-AIzaSyDaVrp5DyCfmDx60NFbBBSzPCfK8X4qyho
-10 requests per second
